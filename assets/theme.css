@@ -1,0 +1,2572 @@
+/* z-index is NOT hand-set here anymore. Each piece declares its layer with
+   data-layer (components/layers.py); the number below is only its depth WITHIN
+   that layer, riding on --layer-z. Change the ontology, not these. */
+/* BASE (structure) — every skin sets only the tokens in :root + a few treatment overrides.
+   This is the design-system foundation: layout/size rules that never change, driven by vars. */
+
+:root{
+  /* palette */
+  --accent:#F5B301; --accent-ink:#141007;
+  --bg:#141007; --card-bg:hsla(0,0%,100%,.06); --card-bd:hsla(0,0%,100%,.14);
+  --ink:#ffffff; --light:hsla(0,0%,100%,.95); --dim:hsla(0,0%,100%,.55); --line:hsla(0,0%,100%,.2);
+  /* verdict — the two colours the paddles already speak in; a skin may retune them */
+  --ok:#2FB673; --bad:#E5573E;
+  /* type */
+  --head:'Montserrat',-apple-system,Arial,sans-serif; --body:'Montserrat',-apple-system,Arial,sans-serif;
+  --head-weight:800; --head-tracking:0;
+  /* shape */
+  --radius:20px; --radius-lg:22px; --pill:999px; --card-pad:38px 44px;
+  --shadow:0 20px 60px rgba(0,0,0,.5);
+  --underline:var(--accent); --underline-h:.18em;   /* highlighter under headline */
+  --hair:1px solid var(--card-bd);
+}
+html,body,.reveal-viewport,.reveal{background:var(--bg)!important;}
+.reveal{font-family:var(--body);font-weight:600;color:var(--light);}
+.reveal .slides section{text-align:left;height:720px;}
+
+/* badge / pill */
+.gd-badge{display:inline-block;color:var(--light);font-weight:700;text-transform:uppercase;
+  font-size:20px;padding:8px 24px;background:var(--card-bg);letter-spacing:.09em;border-radius:var(--pill);
+  border:var(--hair);}
+.gd-pill{display:inline-block;font-size:16px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--accent);border:1.5px solid var(--accent);padding:5px 16px;border-radius:var(--pill);}
+
+/* cover */
+.gd-cover h1{font-family:var(--head);font-size:76px;line-height:1.04;font-weight:var(--head-weight);
+  letter-spacing:var(--head-tracking);margin:.2em 0;max-width:900px;color:var(--light);}
+.gd-cover .gd-meta{color:var(--dim);font-size:22px;font-weight:600;display:flex;gap:1.2em;align-items:center;margin-top:.6em;}
+.gd-cover .gd-meta img{height:1.1em;vertical-align:middle;opacity:.7;margin-right:.35em;}
+
+/* principle headline */
+.gd-principle h2{font-family:var(--head);font-size:52px;font-weight:var(--head-weight);line-height:1.05;
+  letter-spacing:var(--head-tracking);margin:0 0 .25em;color:var(--light);}
+.gd-principle h2 .u{box-shadow:inset 0 calc(-1*var(--underline-h)) 0 var(--underline);}
+.gd-principle p{font-size:26px;font-weight:600;color:var(--light);line-height:1.35;}
+.gd-principle .ex{color:var(--dim);font-size:22px;margin-top:.6em;}
+
+/* stat */
+/* GRAN PULIDO 2026-07-16 (carril gran-pulido, precedente 23e5862): pieza de PURA
+   tipografía — la materialidad va en la TINTA: el número héroe gana masa con
+   drop-shadow doble (contacto + ambiente) y un halo tenue del accent (presencia
+   sobre el escenario oscuro). drop-shadow, no text-shadow: respeta el contorno del
+   glifo y convive con los skins que ya pintan la tinta (skin-4/5). MISMO DOM. */
+.gd-stat{text-align:center;width:100%;}
+.gd-stat .n{font-variant-numeric:lining-nums;font-family:var(--head);font-size:150px;font-weight:var(--head-weight);color:var(--accent);line-height:1;letter-spacing:var(--head-tracking);
+  filter:drop-shadow(0 3px 0 rgba(0,0,0,.20)) drop-shadow(0 16px 34px rgba(0,0,0,.30))
+         drop-shadow(0 0 46px color-mix(in srgb,var(--accent) 20%,transparent));}
+.gd-stat .l{font-size:30px;font-weight:700;margin-top:.1em;color:var(--light);text-shadow:0 2px 10px rgba(0,0,0,.30);}
+.gd-stat .c{font-size:22px;font-weight:600;color:var(--dim);max-width:760px;margin:.6em auto 0;}
+
+/* device (phone / desktop) */
+.gd-phone{position:absolute;width:322px;height:672px;border-radius:52px;background:#0b0b0b;
+  box-shadow:var(--shadow),inset 0 0 0 2px #2a2a2a;padding:11px;}
+.gd-phone::before{content:"";position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:150px;height:26px;background:#0b0b0b;border-radius:0 0 18px 18px;z-index:3;}
+.gd-phone .scr{width:100%;height:100%;border-radius:42px;overflow:hidden;background:#fff;}
+.gd-phone .scr img,.gd-phone .scr video{width:100%;display:block;}
+.gd-desktop{position:absolute;border-radius:12px;overflow:hidden;background:#111;box-shadow:var(--shadow);border:var(--hair);}
+.gd-desktop img,.gd-desktop video{width:100%;display:block;}
+
+/* device (browser / tablet / terminal) — the screenshot always fits the placeholder:
+   width is set inline, the chrome draws around it, img fills 100% of the viewport area */
+.gd-browser{position:absolute;border-radius:12px;overflow:hidden;background:#1b1b1f;
+  box-shadow:var(--shadow);border:var(--hair);}
+.gd-browser .bar{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;background:#26262b;}
+.gd-browser .bar i{width:11px;height:11px;border-radius:50%;background:#ff5f57;flex:none;}
+.gd-browser .bar i:nth-child(2){background:#febc2e;} .gd-browser .bar i:nth-child(3){background:#28c840;}
+.gd-browser .bar .url{flex:1;margin-left:6px;background:#1b1b1f;color:hsla(0,0%,100%,.5);font-size:13px;
+  font-weight:600;border-radius:8px;padding:4px 12px;white-space:nowrap;overflow:hidden;}
+.gd-browser .scr{background:#fff;} .gd-browser .scr img,.gd-browser .scr video{width:100%;display:block;}
+.gd-tablet{position:absolute;border-radius:26px;background:#0b0b0b;
+  box-shadow:var(--shadow),inset 0 0 0 2px #2a2a2a;padding:16px;}
+.gd-tablet .scr{width:100%;height:100%;border-radius:14px;overflow:hidden;background:#fff;}
+.gd-tablet .scr img,.gd-tablet .scr video{width:100%;height:100%;object-fit:cover;display:block;}
+.gd-terminal{position:absolute;border-radius:12px;overflow:hidden;background:#0d1117;
+  box-shadow:var(--shadow);border:var(--hair);}
+.gd-terminal .bar{display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;background:#161b22;}
+.gd-terminal .bar i{width:11px;height:11px;border-radius:50%;background:#ff5f57;flex:none;}
+.gd-terminal .bar i:nth-child(2){background:#febc2e;} .gd-terminal .bar i:nth-child(3){background:#28c840;}
+.gd-terminal .bar .ttl{color:hsla(0,0%,100%,.4);font-size:12.5px;font-weight:600;margin-left:6px;}
+.gd-terminal pre{margin:0;padding:18px 20px;font:600 15.5px/1.55 "SF Mono",Menlo,monospace;
+  color:#7ee787;white-space:pre-wrap;}
+.gd-terminal pre b{color:#e6edf3;font-weight:700;} .gd-terminal .scr img,.gd-terminal .scr video{width:100%;display:block;}
+
+/* theory cards — modelos mentales / principios / mito-vs-dato / definiciones.
+   Placeable anywhere (left/top/w), each kind gets a distinct header band. */
+.gd-theory{position:absolute;box-sizing:border-box;border-radius:14px;background:var(--card-bg);
+  border:var(--hair);box-shadow:0 12px 34px rgba(0,0,0,.35);overflow:hidden;}
+.gd-theory .th-band{display:flex;align-items:center;gap:8px;padding:9px 16px;font-size:13px;
+  font-weight:800;letter-spacing:.09em;text-transform:uppercase;}
+.gd-theory .th-body{padding:14px 18px 16px;}
+.gd-theory .th-name{font-family:var(--head);font-size:22px;font-weight:800;line-height:1.15;color:var(--light);margin-bottom:.25em;}
+.gd-theory .th-def{font-size:16.5px;font-weight:600;line-height:1.4;color:var(--light);}
+.gd-theory .th-ex{font-size:14px;font-weight:600;color:var(--dim);margin-top:.55em;line-height:1.4;}
+.gd-theory .th-src{font-size:12px;font-weight:700;color:var(--dim);margin-top:.6em;letter-spacing:.02em;}
+.gd-theory.th-principle .th-band{background:hsla(45,95%,55%,.16);color:var(--accent);}
+.gd-theory.th-model .th-band{background:hsla(200,80%,60%,.16);color:#69c0ff;}
+.gd-theory.th-definition .th-band{background:hsla(0,0%,100%,.10);color:var(--light);}
+.gd-theory.th-mythfact .th-band{background:hsla(340,80%,62%,.16);color:#ff7ea8;}
+.gd-theory .th-myth,.gd-theory .th-fact{display:flex;gap:10px;align-items:baseline;font-size:15.5px;
+  font-weight:600;line-height:1.4;color:var(--light);}
+.gd-theory .th-myth{color:var(--dim);text-decoration:line-through;text-decoration-color:#ff7ea8;
+  text-decoration-thickness:2px;margin-bottom:.5em;}
+.gd-theory .th-myth b,.gd-theory .th-fact b{text-decoration:none;}
+.gd-theory .th-tag{flex:none;font-size:10.5px;font-weight:800;letter-spacing:.08em;border-radius:5px;
+  padding:2px 7px;transform:translateY(-1px);}
+.gd-theory .th-myth .th-tag{background:hsla(340,80%,62%,.2);color:#ff7ea8;text-decoration:none;}
+.gd-theory .th-fact .th-tag{background:hsla(150,60%,45%,.2);color:#5fd39a;}
+.gd-theory .th-steps{display:flex;flex-direction:column;gap:8px;margin-top:2px;}
+.gd-theory .th-step{display:flex;gap:10px;align-items:baseline;font-size:15px;font-weight:600;color:var(--light);line-height:1.35;}
+.gd-theory .th-step .n{flex:none;width:22px;height:22px;border-radius:50%;background:hsla(200,80%,60%,.18);
+  color:#69c0ff;font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center;transform:translateY(2px);}
+
+/* narrator + speech + caption + hand + mark */
+.gd-narrator{position:absolute;}
+.gd-narrator img{display:block;height:100%;width:auto;filter:drop-shadow(0 8px 16px rgba(0,0,0,.35));}
+.gd-speech{position:absolute;max-width:360px;background:#fff;color:#1a1a1a;font-weight:600;font-size:24px;
+  line-height:1.3;padding:18px 22px;border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.25);}
+.gd-speech::after{content:"";position:absolute;bottom:-16px;left:40px;border:12px solid transparent;border-top-color:#fff;border-bottom:0;}
+.gd-speech--right::after{left:auto;right:40px;}
+.gd-caption{position:absolute;left:36px;top:430px;max-width:400px;background:var(--card-bg);
+  border-left:4px solid var(--accent);padding:14px 20px;border-radius:6px;font-size:23px;font-weight:600;color:var(--light);line-height:1.35;}
+.gd-caption b{color:var(--accent);}
+.gd-hand{position:absolute;} .gd-hand img{display:block;height:100%;}
+.gd-mark{position:absolute;} .gd-mark img{display:block;width:100%;}
+
+/* cheat-sheet / poll / completion */
+.gd-cheat{position:absolute;left:120px;top:120px;width:1040px;box-sizing:border-box;background:var(--card-bg);border:var(--hair);
+  border-radius:var(--radius-lg);padding:40px 48px;}
+.gd-cheat h2{font-family:var(--head);font-size:44px;font-weight:var(--head-weight);margin:0 0 .4em;color:var(--light);}
+.gd-cheat ul{font-size:26px;font-weight:600;line-height:1.6;margin:0;padding-left:1.2em;color:var(--light);}
+.gd-cheat .cta{margin-top:.8em;display:inline-block;background:var(--accent);color:var(--accent-ink);
+  font-weight:800;font-size:24px;padding:14px 30px;border-radius:var(--pill);}
+.gd-poll{text-align:center;width:100%;} .gd-poll h2{font-family:var(--head);font-size:46px;font-weight:var(--head-weight);margin-bottom:.6em;color:var(--light);}
+.gd-poll .opts{display:flex;gap:24px;justify-content:center;}
+.gd-poll .opt{position:relative;background:var(--card-bg);border:2px solid var(--line);border-radius:var(--radius);padding:22px 40px;font-size:30px;font-weight:700;color:var(--light);}
+/* graded quiz: the right option lights up on its own beat; the ✓ rides the corner */
+.gd-poll.quiz h2{font-size:42px;}
+.gd-poll .opt .ok{position:absolute;inset:-2px;border:2px solid var(--ok);border-radius:inherit;
+  background:color-mix(in srgb,var(--ok) 16%,transparent);pointer-events:none;}
+.gd-poll .opt .ok::after{content:"✓";position:absolute;top:-15px;right:-13px;width:30px;height:30px;border-radius:50%;
+  background:var(--ok);color:#fff;font-size:17px;font-weight:800;font-style:normal;display:flex;align-items:center;justify-content:center;}
+.gd-poll .hint{margin:.7em auto 0;max-width:760px;font-size:24px;font-weight:600;color:var(--accent);}
+.gd-poll .why{margin:.55em auto 0;max-width:840px;font-size:25px;font-weight:600;line-height:1.4;color:var(--light);
+  background:var(--card-bg);border:var(--hair);border-left:3px solid var(--ok);border-radius:var(--radius);padding:18px 26px;}
+.gd-done{text-align:center;width:100%;} .gd-done .big{font-family:var(--head);font-size:64px;font-weight:var(--head-weight);color:var(--light);}
+/* kicker — la Q de portada respondida (eco cover→cierre): eyebrow teal sobre el titular */
+.gd-done .kick{font-size:17px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.5em;}
+.gd-done .kick b{color:var(--light);}
+.gd-done .sub{font-size:28px;color:var(--dim);font-weight:600;margin-top:.3em;}
+.gd-done .body{font-size:26px;font-weight:600;line-height:1.45;color:var(--light);max-width:760px;margin:.7em auto 0;}
+.gd-done .cta{margin-top:.9em;display:inline-block;background:var(--accent);color:var(--accent-ink);
+  font-weight:800;font-size:24px;padding:14px 30px;border-radius:var(--pill);}
+/* la firma de la casa: el logo soulbeats como remate silencioso, separado por un filete teal */
+.gd-done-mark{margin-top:1.5em;padding-top:1.1em;display:flex;flex-direction:column;align-items:center;}
+.gd-done-mark::before{content:"";display:block;width:56px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);margin-bottom:1em;}
+.gd-done-mark .gd-sb-mark{opacity:.98;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35));}
+/* el hero neón trae su propio halo (feGaussianBlur) — sin drop-shadow que lo ensucie */
+.gd-done-mark .gd-sb-mark.neon{opacity:1;filter:none;}
+
+/* ---- TEARDOWN: journeychart — the recap (emotional level Y × journey X) ---- */
+.gd-journey{box-sizing:border-box;}
+.gd-journey .ttl{position:absolute;left:0;top:-92px;font-family:var(--head);font-size:44px;
+  font-weight:var(--head-weight);color:var(--light);white-space:nowrap;}
+.gd-journey .yl{position:absolute;right:calc(100% + 16px);transform:translateY(-50%);white-space:nowrap;
+  font-size:15px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);}
+.gd-journey .grid{position:absolute;left:0;height:1px;background:var(--line);opacity:.5;}
+.gd-journey .plot{position:absolute;left:0;top:0;overflow:visible;}
+.gd-journey .plot .seg{stroke:var(--dim);stroke-width:5;stroke-linecap:round;}
+.gd-journey .plot .seg.dn{stroke:var(--bad);} .gd-journey .plot .seg.up{stroke:var(--ok);}
+.gd-journey .vtx{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;}
+.gd-journey .vtx .face{font-size:24px;line-height:1;}
+.gd-journey .xcol{position:absolute;top:calc(100% + 14px);transform:translateX(-50%);width:168px;text-align:center;}
+.gd-journey .xl{font-size:17px;font-weight:700;line-height:1.25;color:var(--light);}
+.gd-journey .note{margin-top:.4em;font-size:15px;font-weight:600;line-height:1.35;color:var(--dim);}
+.gd-journey .grade{position:absolute;text-align:center;}
+.gd-journey .grade .v{display:block;font-family:var(--head);font-size:92px;font-weight:var(--head-weight);
+  line-height:1;color:var(--accent);}
+.gd-journey .grade .lbl{display:block;margin-top:.35em;font-size:15px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);}
+
+/* ---- STRATEGY: question card ---- */
+.gd-qcard{position:absolute;left:452px;top:120px;width:760px;box-sizing:border-box;background:var(--card-bg);border:var(--hair);
+  border-radius:var(--radius-lg);padding:var(--card-pad);}
+.gd-qcard .qnum{position:absolute;top:-26px;left:36px;width:56px;height:56px;border-radius:var(--radius);
+  background:var(--accent);color:var(--accent-ink);font-family:var(--head);font-weight:800;font-size:26px;display:flex;align-items:center;justify-content:center;}
+.gd-qcard h2{font-family:var(--head);font-size:40px;font-weight:var(--head-weight);line-height:1.12;margin:.35em 0 .45em;color:var(--light);}
+.gd-qcard .stakes{font-size:23px;font-weight:600;line-height:1.4;color:var(--dim);}
+.gd-qcard .stakes b{color:var(--accent);}
+
+/* ---- STRATEGY: 2x2 matrix ---- */
+/* GRAN PULIDO 2026-07-16 (carril gran-pulido, precedente 23e5862): los ejes eran dos
+   bordes planos y el dot un círculo con halo — ahora el plot es una PLACA de gráfico
+   (superficie translúcida con bisel + sombra contacto+ambiente), los ejes llevan
+   FLECHA (dirección = argumento), las medianas son punteadas (trazo de borrador) y
+   el dot es una CANICA (bisel esférico + sombra de contacto + halo). MISMO DOM,
+   misma geometría del plot (los bubs se calculan contra ese inset en el renderer). */
+.gd-matrix{position:absolute;left:360px;top:96px;width:560px;height:520px;}
+.gd-matrix .plot{position:absolute;inset:40px 20px 46px 60px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);
+  border-radius:6px 16px 6px 0;
+  background:linear-gradient(165deg,hsla(0,0%,100%,.05),hsla(0,0%,100%,.015) 62%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 2px 6px rgba(0,0,0,.18),0 18px 44px rgba(0,0,0,.26);}
+.gd-matrix .plot::before,.gd-matrix .plot::after{content:"";position:absolute;opacity:.6;}
+.gd-matrix .plot::before{left:50%;top:0;bottom:0;width:1px;
+  background:repeating-linear-gradient(180deg,var(--line) 0 6px,transparent 6px 13px);}
+.gd-matrix .plot::after{top:50%;left:0;right:0;height:1px;
+  background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 13px);}
+/* puntas de flecha de los ejes (el plot ya gasta sus dos pseudos en las medianas) */
+.gd-matrix::before{content:"";position:absolute;right:11px;bottom:42px;width:0;height:0;
+  border-left:9px solid color-mix(in srgb,var(--dim) 55%,var(--line));
+  border-top:5px solid transparent;border-bottom:5px solid transparent;}
+.gd-matrix::after{content:"";position:absolute;left:56px;top:31px;width:0;height:0;
+  border-bottom:9px solid color-mix(in srgb,var(--dim) 55%,var(--line));
+  border-left:5px solid transparent;border-right:5px solid transparent;}
+.gd-matrix .bub{position:absolute;transform:translate(-50%,50%);text-align:center;}
+.gd-matrix .bub .dot{width:22px;height:22px;border-radius:50%;background:var(--accent);margin:0 auto 6px;
+  box-shadow:inset 0 2px 3px rgba(255,255,255,.38),inset 0 -3px 4px rgba(0,0,0,.28),
+             0 3px 6px rgba(0,0,0,.35),0 0 0 8px color-mix(in srgb,var(--accent) 20%,transparent);}
+.gd-matrix .bub .bl{font-family:var(--head);font-size:26px;font-weight:800;color:var(--light);text-shadow:0 2px 8px rgba(0,0,0,.35);}
+.gd-matrix .bub .bn{font-size:16px;font-weight:600;color:var(--dim);width:230px;margin:4px auto 0;line-height:1.3;}
+.gd-matrix .ax{position:absolute;font-size:17px;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:.04em;}
+.gd-matrix .ax-x-l{left:60px;bottom:16px;} .gd-matrix .ax-x-r{right:20px;bottom:16px;}
+.gd-matrix .ax-y-t{left:6px;top:34px;} .gd-matrix .ax-y-b{left:6px;bottom:52px;}
+/* GRAN PULIDO-2 2026-07-17 (gramática de tinta de stat 3a1431e): el título de slide
+   gana masa con drop-shadow doble (contacto + ambiente, respeta el contorno del glifo
+   y convive con skins que pintan la tinta) y estrena su SUBRAYADO — el guión marcador
+   del accent bajo el arranque del texto (::after ABSOLUTO: no cambia la caja ni el
+   getBoundingClientRect que miden los gates; eco de la regla del eyebrow). MISMO DOM. */
+.gd-mtitle{position:absolute;left:360px;top:44px;right:44px;font-family:var(--head);font-size:34px;font-weight:var(--head-weight);color:var(--light);
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.18)) drop-shadow(0 8px 18px rgba(0,0,0,.22));}
+.gd-mtitle::after{content:"";position:absolute;left:2px;top:calc(100% + 7px);width:56px;height:4px;
+  border-radius:2px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 30%,transparent));}
+.gd-math.compact .eq .term .v{font-size:42px!important;}
+.gd-math.compact .eq .op{font-size:30px;}
+.gd-math.compact .eq .term .l{font-size:14px;}
+.gd-mcap{position:absolute;left:948px;top:280px;width:268px;font-size:22px;font-weight:600;color:var(--light);line-height:1.35;border-left:4px solid var(--accent);padding-left:18px;}
+
+/* ---- STRATEGY: concentration bars ---- */
+.gd-bars{position:absolute;left:120px;top:150px;width:1040px;}
+.gd-bars h2{font-family:var(--head);font-size:40px;font-weight:var(--head-weight);margin:0 0 .6em;color:var(--light);}
+.gd-bars .row{display:flex;align-items:center;gap:16px;margin:12px 0;}
+.gd-bars .rl{width:230px;font-size:22px;font-weight:700;text-align:right;color:var(--light);}
+.gd-bars .track{flex:1;background:var(--card-bg);border-radius:8px;height:40px;overflow:hidden;}
+.gd-bars .fill{height:100%;background:var(--line);border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:12px;font-size:20px;font-weight:800;color:var(--light);}
+.gd-bars .fill.hi{background:var(--accent);color:var(--accent-ink);}
+.gd-bars .note{margin-top:1.1em;font-size:22px;font-weight:600;color:var(--dim);} .gd-bars .note b{color:var(--accent);}
+
+/* ============================================================
+   EDITORIAL MICROCOMPONENTS (shared; skins restyle via tokens)
+   ============================================================ */
+
+/* background craft layer — skins fill --bg-craft (layered backgrounds) + --plate (frame) */
+.reveal .slides::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:var(--bg-craft,transparent);border:var(--plate,0 solid transparent);}
+.reveal .slides > section{z-index:1;}
+
+/* safe-zone helpers (1280x720, editorial margins 84 / 60) */
+.gd-safe{position:absolute;left:84px;top:60px;right:84px;}
+
+/* eyebrow / kicker: small-caps label with a leading rule */
+/* GRAN PULIDO-2 2026-07-17: la regla plana pasa a TRAZO — gradiente que muere hacia
+   el texto + radio + glow tenue del accent (la regla es LUZ, no un border), y el
+   label gana lift (sombra corta de contacto sobre foto/panel). MISMO DOM. */
+.gd-eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--body);font-size:16px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--accent);
+  text-shadow:0 1px 4px rgba(0,0,0,.28);}
+.gd-eyebrow::before{content:"";width:34px;height:2px;display:inline-block;border-radius:1px;
+  background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 45%,transparent));
+  box-shadow:0 0 6px color-mix(in srgb,var(--accent) 40%,transparent);}
+.gd-eyebrow.no-rule::before{display:none;}
+
+/* LA IDEA callout box */
+.gd-idea{position:absolute;background:var(--card-bg);border:var(--hair);border-left:5px solid var(--accent);
+  border-radius:var(--radius);padding:30px 40px;}
+.gd-idea .lbl{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:var(--accent);margin-bottom:.5em;display:block;}
+.gd-idea .txt{font-family:var(--head);font-size:34px;font-weight:var(--head-weight);line-height:1.2;color:var(--light);}
+
+/* pull quote */
+.gd-quote{position:absolute;max-width:900px;}
+.gd-quote .q{font-family:var(--head);font-size:52px;font-weight:var(--head-weight);line-height:1.16;color:var(--light);}
+.gd-quote .q::before{content:"\201C";color:var(--accent);}
+.gd-quote .by{margin-top:.6em;font-size:20px;font-weight:600;color:var(--dim);letter-spacing:.02em;}
+
+/* drop cap */
+.gd-drop::first-letter{float:left;font-family:var(--head);font-size:96px;line-height:.72;font-weight:var(--head-weight);
+  color:var(--accent);padding:8px 14px 0 0;}
+
+/* footnotes (bottom-left, superscript refs elsewhere) */
+.gd-foot{position:absolute;left:84px;bottom:64px;right:84px;font-size:14px;line-height:1.5;color:var(--dim);
+  border-top:1px solid var(--line);padding-top:10px;}
+.gd-foot .fn{margin-right:1.4em;} .gd-foot sup,sup.gd-ref{color:var(--accent);font-weight:700;font-size:.62em;vertical-align:super;padding:0 .1em;}
+
+/* page eyebrow (running footer, like a report) */
+.gd-page{position:absolute;left:84px;right:84px;bottom:26px;display:flex;justify-content:space-between;
+  font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
+  border-top:1px solid var(--line);padding-top:8px;}
+.gd-page b{color:var(--light);font-weight:700;}
+
+/* milestone / pillar progress bar (bottom) */
+/* GRAN PULIDO-2 2026-07-17 (precedente 3a1431e/1cd7ade): los segmentos planos pasan a
+   FÍSICOS — el pendiente es un CANAL hundido (inset), el ganado es una barra ILUMINADA
+   (gradiente + bisel de luz + glow del accent), y el hito ACTIVO (el último encendido,
+   :has — solo CSS) RESPIRA con un halo que pulsa al reloj de la casa (2.6s); su cap
+   recoge el brillo. Reposo (reduced-motion = gates) = halo fijo. MISMO DOM; los
+   morph-ids gd-miles-<i> tweenean igual (el ::after del activo viaja con su seg). */
+.gd-miles{position:absolute;left:84px;right:84px;bottom:20px;display:flex;gap:6px;}
+.gd-miles .seg{flex:1;height:8px;border-radius:4px;position:relative;
+  background:color-mix(in srgb,var(--line) 60%,transparent);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.32),inset 0 -1px 0 rgba(255,255,255,.06);}
+.gd-miles .seg.on{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 84%,white),var(--accent) 55%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 3px rgba(0,0,0,.28),
+             0 0 10px color-mix(in srgb,var(--accent) 38%,transparent);}
+.gd-miles .seg.on:not(:has(~ .seg.on))::after{content:"";position:absolute;inset:-3px;
+  border-radius:7px;pointer-events:none;
+  background:radial-gradient(60% 140% at 50% 50%,color-mix(in srgb,var(--accent) 32%,transparent),transparent 72%);
+  animation:gd-miles-pulse 2.6s ease-in-out infinite alternate;}
+@keyframes gd-miles-pulse{from{opacity:.35;}to{opacity:1;}}
+@media (prefers-reduced-motion:reduce){
+  .gd-miles .seg.on:not(:has(~ .seg.on))::after{animation:none;opacity:.6;}}
+.gd-miles .seg .cap{position:absolute;top:12px;left:0;font-size:12.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--dim);white-space:nowrap;}
+.gd-miles .seg.on .cap{color:var(--light);}
+.gd-miles .seg.on:not(:has(~ .seg.on)) .cap{color:var(--light);
+  text-shadow:0 0 8px color-mix(in srgb,var(--accent) 45%,transparent);}
+
+/* numbered annotation pin */
+.gd-annpin{position:absolute;width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  font-family:var(--head);font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.3);z-index:calc(var(--layer-z) + 5);}
+
+/* highlight ring (rounded, hand-tilted) */
+.gd-ring{position:absolute;border:3px solid var(--accent);border-radius:50%;transform:rotate(-6deg);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 15%,transparent);pointer-events:none;z-index:calc(var(--layer-z) + 4);}
+
+/* hand-drawn annotation arrow / underline: styled via inline svg */
+.gd-anno{position:absolute;pointer-events:none;z-index:calc(var(--layer-z) + 4);}
+.gd-anno svg{overflow:visible;} .gd-anno path,.gd-anno line{stroke:var(--accent);fill:none;stroke-width:4.4;stroke-linecap:round;}
+.gd-anno .head{fill:var(--accent);stroke:none;}
+
+/* source chip */
+.gd-src{position:absolute;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);}
+.gd-src b{color:var(--accent);}
+
+/* mini comparison table */
+/* GRAN PULIDO 2026-07-16 (carril gran-pulido, precedente 23e5862): la banda desnuda
+   pasa a tener SUELO — una placa translúcida detrás (::before absoluto, fuera del
+   flujo: NI una celda se mueve), cabecera con subrayado del accent y las celdas hl
+   con halo. La tabla crea su stacking context montada en --layer-z (0 si nadie la
+   estampa) para que la placa quede bajo el texto y sobre el fondo. MISMO DOM. */
+.gd-table{position:absolute;border-collapse:collapse;font-size:20px;max-width:1112px;
+  z-index:calc(var(--layer-z, 0));}
+.gd-table::before{content:"";position:absolute;inset:-18px -26px -20px -26px;z-index:-1;
+  border-radius:var(--radius-lg);
+  background:linear-gradient(170deg,hsla(0,0%,100%,.055),hsla(0,0%,100%,.02) 70%);
+  border:var(--hair);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 2px 6px rgba(0,0,0,.22),0 18px 44px rgba(0,0,0,.30);}
+.gd-table th{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:color-mix(in srgb,var(--dim) 72%,var(--light));
+  text-align:left;padding:0 26px 10px 0;border-bottom:2px solid color-mix(in srgb,var(--accent) 45%,var(--line));}
+.gd-table td{padding:14px 26px 14px 0;border-bottom:1px solid var(--line);color:var(--light);font-weight:600;vertical-align:top;
+  font-variant-numeric:lining-nums;}
+.gd-table td.k{font-family:var(--head);font-weight:var(--head-weight);color:var(--light);}
+.gd-table td.hl{color:var(--accent);font-weight:800;
+  text-shadow:0 0 16px color-mix(in srgb,var(--accent) 38%,transparent);}
+
+/* pillar divider (section break slide) */
+.gd-divider{position:absolute;left:84px;top:230px;right:120px;}
+.gd-divider .pn{font-family:var(--head);font-size:150px;font-weight:var(--head-weight);line-height:.8;color:var(--accent);opacity:.25;position:absolute;right:0;top:-70px;}
+.gd-divider h2{font-family:var(--head);font-size:60px;font-weight:var(--head-weight);line-height:1.04;margin:.2em 0 0;color:var(--light);max-width:760px;}
+.gd-divider .sub{font-size:24px;font-weight:600;color:var(--dim);margin-top:.6em;max-width:640px;line-height:1.4;}
+
+/* inline stat chip */
+.gd-chip{display:inline-flex;align-items:baseline;gap:.25em;background:var(--card-bg);border:var(--hair);
+  border-radius:var(--pill);padding:4px 14px;font-weight:800;color:var(--accent);}
+
+/* ============================================================
+   "OFICIO" CRAFT LAYER (photo bg, sticker, handwritten bubble,
+   circular avatar, animated swipe affordance) — the elaborate feel
+   ============================================================ */
+:root{ --hand:'Kalam','Caveat',cursive; }
+
+/* full-bleed photo background + tint overlay */
+.gd-photobg{position:absolute;inset:0;z-index:calc(var(--layer-z) + 0);overflow:hidden;}
+.gd-photobg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.gd-photobg .ov{position:absolute;inset:0;background:var(--ov,linear-gradient(180deg,hsla(210,45%,10%,.55),hsla(210,45%,8%,.72)));}
+
+/* sticker note — hard offset shadow, slight rotation, handwritten */
+.gd-sticker{position:absolute;max-width:340px;width:max-content;background:var(--sticker-bg,#FCE9A6);color:var(--sticker-ink,#2a2410);
+  font-family:var(--hand);font-weight:700;font-size:30px;line-height:1.12;padding:16px 22px;
+  border-radius:8px;box-shadow:5px 6px 0 rgba(0,0,0,.28);transform:rotate(-2.5deg);z-index:calc(var(--layer-z) + 6);}
+.gd-sticker b{color:var(--accent);}
+
+/* handwritten speech bubble — sketchy double-line hand-drawn outline + Kalam */
+.gd-hspeech{position:absolute;max-width:520px;background:#fff;color:#1d2b36;font-family:var(--hand);
+  font-weight:700;font-size:30px;line-height:1.32;padding:20px 30px;border:none;
+  border-radius:22px;box-shadow:0 14px 34px rgba(0,0,0,.38), 0 2px 6px rgba(0,0,0,.18);
+  z-index:calc(var(--layer-z) + 6);text-align:center;transform:rotate(-0.5deg);}
+.gd-hspeech::after{content:"";position:absolute;bottom:-11px;left:40px;width:26px;height:26px;background:#fff;
+  border-radius:4px;transform:rotate(45deg);z-index:-1;}
+.gd-hspeech--r::after{left:auto;right:38px;transform:rotate(6deg) scaleX(-1);}
+/* directional tails so the bubble always points AT the speaker */
+.gd-hspeech.tail-l::after{bottom:auto;left:-19px;top:50%;margin-top:-6px;transform:rotate(48deg);}   /* speaker to the LEFT (same height) */
+.gd-hspeech.tail-dl::after{bottom:-19px;left:20px;transform:rotate(-30deg);}                          /* speaker DOWN-left */
+.gd-hspeech.tail-r::after{bottom:auto;left:auto;right:-19px;top:50%;margin-top:-6px;transform:rotate(-138deg);} /* speaker to the RIGHT */
+.gd-hspeech.tail-d::after{left:50%;margin-left:-14px;transform:rotate(-6deg);}                        /* speaker straight BELOW */
+.gd-hspeech.tail-dr::after{bottom:-19px;left:auto;right:20px;transform:rotate(30deg);}                /* speaker DOWN-right */
+
+/* circular avatar — look GD: el personaje SALE del agujero (capa, no foto en círculo).
+   .hole = el disco/anillo detrás · img.in = recorte circular (parte baja) ·
+   img.out = mitad superior sin recorte (cabeza/brazos asoman sobre el borde). */
+.gd-avatar{position:absolute;overflow:visible;z-index:calc(var(--layer-z) + 5);}
+/* el agujero OCLUYE lo de dentro (disco sólido, no translúcido): capa, no objeto */
+.gd-avatar .hole{position:absolute;inset:0;border-radius:50%;background:#0d2030;
+  box-shadow:inset 0 10px 24px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.35);}
+.gd-avatar .ring{position:absolute;inset:0;border-radius:50%;border:4px solid var(--accent);
+  pointer-events:none;}
+/* clip-path (no border-radius+overflow): recorta también la capa compositada del bob */
+.gd-avatar .clip{position:absolute;inset:0;clip-path:circle(50% at 50% 50%);}
+.gd-avatar img{position:absolute;left:50%;bottom:2%;transform:translateX(-50%);
+  width:94%;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35));
+  animation:gd-avatar-bob 3.6s ease-in-out infinite;}
+/* el pop solo por ENCIMA del borde: cabeza/hombros. La línea de asomo es un PARAM
+   (--pop-at, fracción de la altura del img; default .39 = el 61% histórico) — el
+   recorte dependiente del asset nunca es un literal (contract §5b). */
+.gd-avatar img.out{clip-path:inset(0 0 calc((1 - var(--pop-at,.39))*100%) 0);}
+/* frame=burst: la silueta ENTERA asoma libre; solo el borde inferior muere en el
+   disco. Para brazos-en-alto / gestos anchos (poses arms-up|wide) — en modo pop la
+   línea recta los amputaba. */
+.gd-avatar.av-burst{--pop-at:.85;}
+/* frame=contain: todo dentro del círculo */
+.gd-avatar.av-contain img.out{display:none;}
+/* frame=none: sin marco — solo el recorte */
+.gd-avatar.av-none .hole,.gd-avatar.av-none .ring,.gd-avatar.av-none .clip{display:none;}
+.gd-avatar.av-none img.out{clip-path:none;}
+@keyframes gd-avatar-bob{0%,100%{transform:translateX(-50%) translateY(0)}
+  50%{transform:translateX(-50%) translateY(-6px)}}
+/* entrada EMERGE (default en pop): el sujeto SUBE dentro del marco fijo — hole,
+   ring y línea de asomo quietos. El img y su ventana de recorte se animan EN
+   CONTRA (transform + clip-path sincronizados), así la ventana no viaja: una
+   ventana de recorte en movimiento enseña un cuerpo en rodajas. Disparo en
+   section.present, patrón anim-laptop. */
+.reveal section.present .gd-avatar.av-enter-emerge .clip img.in{
+  animation:gd-av-rise .65s cubic-bezier(.2,.7,.3,1) both, gd-avatar-bob 3.6s ease-in-out .65s infinite;}
+.reveal section.present .gd-avatar.av-enter-emerge img.out{
+  animation:gd-av-rise-out .65s cubic-bezier(.2,.7,.3,1) both, gd-avatar-bob 3.6s ease-in-out .65s infinite;}
+@keyframes gd-av-rise{
+  from{transform:translateX(-50%) translateY(calc(var(--pop-at,.39)*100%));}
+  to{transform:translateX(-50%) translateY(0);}}
+@keyframes gd-av-rise-out{
+  from{transform:translateX(-50%) translateY(calc(var(--pop-at,.39)*100%));clip-path:inset(0 0 100% 0);}
+  to{transform:translateX(-50%) translateY(0);clip-path:inset(0 0 calc((1 - var(--pop-at,.39))*100%) 0);}}
+/* entrada FADE (default en burst/contain): solo opacidad, nada se traslada */
+.reveal section.present .gd-avatar.av-enter-fade{animation:gd-av-fade .5s ease-out both;}
+@keyframes gd-av-fade{from{opacity:0;}to{opacity:1;}}
+@media (prefers-reduced-motion: reduce){
+  .gd-avatar img{animation:none;}
+  .reveal section.present .gd-avatar.av-enter-emerge .clip img.in,
+  .reveal section.present .gd-avatar.av-enter-emerge img.out,
+  .reveal section.present .gd-avatar.av-enter-fade{animation:none;}}
+/* compat: un gd-avatar antiguo con un solo <img> directo sigue funcionando */
+.gd-avatar > img{width:94%;}
+
+/* animated swipe affordance: key cluster + pointing finger */
+/* ---- the arrow-key hint (`keys`) ----
+   A keycap is three things, and ours had none of them: a FACE with a gradient, a WALL (the
+   dark lip you see because the cap has height), and the SHADOW the cap drops on the chassis.
+   The chassis is LIGHT because it's a keyboard body — a dark translucent card reads as
+   "buttons on a card". GD's reference (corpus asset cf861839…, 46/47 decks) is exactly this,
+   baked as a PNG in their green. Ours is live CSS: the ▶ takes the skin's accent and presses. */
+/* Palette + proportions MEASURED off GD's own asset (corpus cf861839…, 234×155, in 46 of
+   their 47 decks), not guessed: face #EBECED FLAT (they use no gradient), lip #ABACAC — a
+   2-3px band, so the lip is ~73% of the face's value, which is what makes a cap read as a
+   cap. Chassis is TRANSLUCENT cool grey (~.45), not opaque and not black: it picks up
+   whatever the slide is doing behind it, which is why theirs sits on any backdrop. Ours
+   drives the ▶ off --accent instead of their baked green, and the ▶'s triangle is a DARK
+   SHADE OF THE ACCENT (GD: #1E6837 on #44E87B) — never ink-black. */
+/* ONE clock for the whole piece: the key sinks, the ripple leaves it, and the label's arrow
+   follows a beat later — cause and effect, not three loops running past each other. That
+   choreography is the thing a baked PNG + a static hand cutout can never do. */
+.gd-swipe{--beat:2.6s;position:absolute;z-index:calc(var(--layer-z) + 6);
+  display:flex;flex-direction:column;align-items:center;}
+.gd-keys{position:relative;display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:46px 46px;
+  gap:10px;padding:12px;}
+/* The chassis covers the BOTTOM ROW ONLY and the ▲ overhangs it — GD's composition, and the
+   reason theirs reads compact. A full rectangle leaves two dead grey corners either side of
+   the ▲ and the whole thing reads as a slab with buttons on it. The ▲ drops its shadow onto
+   the chassis edge, which is what sells the overhang. */
+.gd-keys::before{content:"";position:absolute;left:0;right:0;bottom:0;top:46px;z-index:0;
+  border-radius:15px;background:linear-gradient(180deg,rgba(203,209,213,.50) 0%,rgba(168,175,181,.42) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45), inset 0 -1px 0 rgba(0,0,0,.10),
+             0 16px 34px rgba(0,0,0,.42), 0 3px 8px rgba(0,0,0,.24);}
+.gd-keys .k{--lip:#A5A6A8;position:relative;z-index:1;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#F6F7F8 0%,#E2E3E5 100%);
+  box-shadow:0 3px 0 var(--lip), 0 5px 9px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.9);}
+.gd-keys .k svg{width:19px;height:19px;fill:#696A6A;}
+.gd-keys .up{grid-area:1/2;} .gd-keys .lt{grid-area:2/1;} .gd-keys .dn{grid-area:2/2;}
+.gd-keys .next{grid-area:2/3;
+  --lip:color-mix(in srgb,var(--accent) 50%,#000);
+  --glow:color-mix(in srgb,var(--accent) 60%,transparent);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 86%,#fff) 0%,var(--accent) 100%);
+  box-shadow:0 3px 0 var(--lip), 0 5px 9px rgba(0,0,0,.26),
+             inset 0 1px 0 color-mix(in srgb,var(--accent) 55%,#fff), 0 0 22px 4px var(--glow);
+  animation:gd-key-press var(--beat) cubic-bezier(.3,0,.2,1) infinite;}
+.gd-keys .next svg{fill:color-mix(in srgb,var(--accent) 45%,#000);
+  animation:gd-key-glyph var(--beat) cubic-bezier(.3,0,.2,1) infinite;}
+/* The press: the cap travels down exactly as far as its wall is tall (3px), so it SINKS into
+   the chassis instead of sliding across it, and the glow swells on contact. */
+@keyframes gd-key-press{
+  0%,60%,100%{transform:translateY(0);
+    box-shadow:0 3px 0 var(--lip), 0 5px 9px rgba(0,0,0,.26),
+               inset 0 1px 0 color-mix(in srgb,var(--accent) 55%,#fff), 0 0 22px 4px var(--glow);}
+  70%,80%{transform:translateY(3px);
+    box-shadow:0 0 0 var(--lip), 0 1px 3px rgba(0,0,0,.30),
+               inset 0 1px 0 color-mix(in srgb,var(--accent) 55%,#fff), 0 0 36px 8px var(--glow);}
+}
+/* the glyph rides the cap down — a hair less, so the cap looks like it has thickness */
+@keyframes gd-key-glyph{0%,60%,100%{transform:translateY(0)} 70%,80%{transform:translateY(1px)}}
+/* the ripple LEAVES the key at the moment of contact (70%) — the only thing on the slide
+   that says "this key is the one", now that no hand points at it */
+.gd-keys .next::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  border:2px solid var(--accent);opacity:0;
+  animation:gd-key-ripple var(--beat) cubic-bezier(.2,.6,.2,1) infinite;}
+/* stays INSIDE the chassis: past ~1.5 it stops reading as a pulse of light and starts
+   reading as a highlight box drawn around the key */
+@keyframes gd-key-ripple{
+  0%,66%{transform:scale(1);opacity:0}
+  72%{transform:scale(1);opacity:.55}
+  100%{transform:scale(1.5);opacity:0}
+}
+/* the label: quiet by default, the key phrase in the deck's voice. Its arrow follows the
+   press a beat later — the text reacts to the key, the key doesn't illustrate the text. */
+.gd-keys-lbl{margin-top:15px;max-width:250px;text-align:center;font-size:14.5px;font-weight:600;
+  line-height:1.45;color:var(--dim);letter-spacing:.01em;text-wrap:balance;}
+.gd-keys-lbl b{color:var(--light);font-weight:700;}
+.gd-keys-lbl .arw{display:inline-block;margin-left:.35em;color:var(--accent);font-weight:700;
+  animation:gd-key-arw var(--beat) cubic-bezier(.3,0,.2,1) infinite;}
+@keyframes gd-key-arw{
+  0%,66%,100%{transform:translateX(0);opacity:.55}
+  78%{transform:translateX(5px);opacity:1}
+}
+@media (prefers-reduced-motion:reduce){
+  .gd-keys .next,.gd-keys .next svg,.gd-keys .next::after,.gd-keys-lbl .arw{animation:none;}
+  .gd-keys .next::after{opacity:0;}
+}
+
+/* cover meta duration with clock glyph */
+.gd-cover .gd-meta .dur{display:inline-flex;align-items:center;gap:.4em;}
+.gd-cover h1 .sub{display:block;font-family:var(--head);font-style:italic;font-weight:400;font-size:.5em;color:var(--dim);margin-top:.15em;letter-spacing:0;}
+
+/* ============ HANDMADE polish: rough sketch on outlines/annotations ============ */
+.gd-hspeech::before{filter:url(#rough);}
+.gd-anno svg{filter:url(#rough2);}
+.gd-ring{filter:url(#rough2);border-width:4px;}
+
+/* ============ MORE VISUAL microcomponents ============ */
+
+/* amount / figure callouts row */
+/* GRAN PULIDO 2026-07-16 (carril gran-pulido, precedente 23e5862): cards planas
+   card-bg+hair → superficie con gradiente, bisel de luz y sombra doble
+   (contacto+ambiente); la cifra gana masa con drop-shadow (misma tinta que stat)
+   y el icono proyecta silueta. MISMO DOM y paddings — cero reflow. */
+.gd-figs{position:absolute;left:84px;right:84px;display:flex;gap:26px;justify-content:space-between;align-items:stretch;}
+.gd-fig{flex:1 1 0;min-width:0;display:flex;flex-direction:column;border:var(--hair);border-radius:var(--radius);padding:24px 26px;overflow:hidden;
+  background:linear-gradient(168deg,hsla(0,0%,100%,.075),hsla(0,0%,100%,.028) 65%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 6px rgba(0,0,0,.22),0 14px 32px rgba(0,0,0,.28);}
+.gd-fig .fig-ic{width:52px;height:52px;object-fit:contain;margin-bottom:12px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.30));}
+.gd-fig .n{font-variant-numeric:lining-nums;font-family:var(--head);font-size:50px;font-weight:var(--head-weight);color:var(--accent);line-height:1;letter-spacing:var(--head-tracking);white-space:nowrap;
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.20)) drop-shadow(0 10px 22px rgba(0,0,0,.26));}
+.gd-fig .l{font-size:22px;font-weight:700;color:var(--light);margin-top:.34em;}
+.gd-fig .s{font-size:18px;font-weight:600;color:var(--dim);margin-top:auto;padding-top:.5em;line-height:1.3;}
+
+/* VS comparison panel (two columns) */
+/* GRAN PULIDO 2026-07-16 (carril gran-pulido, precedente 23e5862): columnas planas
+   card-bg+hair → superficie con gradiente, bisel de luz y sombra contacto+ambiente;
+   la columna B (la elegida) lleva tinte del accent y halo ambiental; el medallón VS
+   pasa de disco plano a MONEDA (bisel arriba/canto abajo). MISMO DOM y paddings. */
+.gd-vs{position:absolute;left:84px;right:84px;top:150px;display:flex;gap:0;align-items:stretch;}
+.gd-vs-col{flex:1;border:var(--hair);border-radius:var(--radius-lg);padding:30px 34px;
+  background:linear-gradient(170deg,hsla(0,0%,100%,.07),hsla(0,0%,100%,.025) 70%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 6px rgba(0,0,0,.22),0 16px 38px rgba(0,0,0,.30);}
+.gd-vs-col.b{border-color:color-mix(in srgb,var(--accent) 45%,var(--card-bd));
+  background:linear-gradient(170deg,color-mix(in srgb,var(--accent) 9%,hsla(0,0%,100%,.05)),
+             color-mix(in srgb,var(--accent) 3%,transparent) 70%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 2px 6px rgba(0,0,0,.22),
+             0 18px 44px color-mix(in srgb,var(--accent) 12%,rgba(0,0,0,.30));}
+.gd-vs-col .cap{font-size:17px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);}
+.gd-vs-col h3{font-family:var(--head);font-size:34px;font-weight:var(--head-weight);color:var(--light);margin:.15em 0 .1em;}
+.gd-vs-col .amt{font-variant-numeric:lining-nums;font-family:var(--head);font-size:46px;font-weight:var(--head-weight);color:var(--light);}
+.gd-vs-col .amt small{font-size:.45em;color:var(--dim);font-weight:600;}
+.gd-vs-col ul{margin:.7em 0 0;padding-left:1.1em;font-size:22px;font-weight:600;color:var(--light);line-height:1.55;}
+.gd-vs-col ul li::marker{color:var(--accent);}
+.gd-vs-mid{width:64px;display:flex;align-items:center;justify-content:center;}
+.gd-vs-mid span{font-family:var(--head);font-size:26px;font-weight:800;color:var(--accent-ink);background:var(--accent);
+  width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.30),inset 0 -3px 0 rgba(0,0,0,.22),
+             0 2px 4px rgba(0,0,0,.25),0 8px 18px rgba(0,0,0,.30);}
+.gd-vs-cap{position:absolute;left:84px;right:84px;top:590px;text-align:center;font-size:22px;font-weight:600;color:var(--dim);} .gd-vs-cap b{color:var(--accent);}
+
+/* checklist with hand-drawn ticks */
+/* GRAN PULIDO-2 2026-07-17: el tick gana FISICA (solo CSS, cero JS, DOM intacto) —
+   el circulo es el checkbox impreso (no se anima: es el artefacto), el CHECK es el
+   gesto humano: se DIBUJA (dashoffset 32→0, largo real del path ≈30u) y el sello
+   remata con un pop de overshoot justo al aterrizar; cascada por fila (+.15s,
+   nth-of-type — las filas son los unicos div hijos). Dispara con section.present;
+   reduced-motion (= modo gates) lo apaga y el reposo es el tick COMPLETO
+   (dasharray 32 > largo del path = trazo solido). El num es una MONEDA. */
+.gd-checks{position:absolute;left:120px;top:170px;width:1040px;}
+.gd-checks h2{font-family:var(--head);font-size:44px;font-weight:var(--head-weight);margin:0 0 .5em;color:var(--light);
+  text-shadow:0 2px 8px rgba(0,0,0,.30);}
+.gd-check{display:flex;gap:20px;align-items:flex-start;margin:18px 0;font-size:25px;font-weight:600;color:var(--light);line-height:1.35;}
+.gd-check .tk{flex:none;width:44px;height:44px;margin-top:-2px;}
+.gd-check .tk svg{width:44px;height:44px;filter:url(#rough2);} .gd-check .tk path{stroke:var(--accent);stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.gd-check .tk circle{stroke:var(--accent);stroke-width:3;fill:none;opacity:.55;}
+.gd-checks .gd-check:nth-of-type(2){--tkd:.15s;} .gd-checks .gd-check:nth-of-type(3){--tkd:.3s;}
+.gd-checks .gd-check:nth-of-type(4){--tkd:.45s;} .gd-checks .gd-check:nth-of-type(5){--tkd:.6s;}
+.gd-checks .gd-check:nth-of-type(6){--tkd:.75s;} .gd-checks .gd-check:nth-of-type(7){--tkd:.9s;}
+.gd-checks .gd-check:nth-of-type(8){--tkd:1.05s;}
+.reveal section.present .gd-check .tk path{stroke-dasharray:32;
+  animation:gd-tk-draw .3s cubic-bezier(.3,0,.2,1) calc(var(--tkd,0s) + .2s) both;}
+.reveal section.present .gd-check .tk svg{
+  animation:gd-tk-pop .6s cubic-bezier(.34,1.56,.64,1) calc(var(--tkd,0s) + .2s) both;}
+@keyframes gd-tk-draw{from{stroke-dashoffset:32;}to{stroke-dashoffset:0;}}
+@keyframes gd-tk-pop{0%,42%{transform:scale(1) rotate(0);}62%{transform:scale(1.16) rotate(-4deg);}
+  82%{transform:scale(.97) rotate(0);}100%{transform:scale(1);}}
+@media (prefers-reduced-motion:reduce){
+  .reveal section.present .gd-check .tk path{animation:none;}
+  .reveal section.present .gd-check .tk svg{animation:none;}}
+.gd-check b{color:var(--accent);}
+.gd-check .num{flex:none;width:40px;height:40px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-family:var(--head);font-weight:800;font-size:20px;display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.28),inset 0 -3px 0 rgba(0,0,0,.20),
+             0 2px 4px rgba(0,0,0,.25),0 6px 14px rgba(0,0,0,.26);}
+
+/* value ladder (stacked rungs) */
+.gd-ladder{position:absolute;left:120px;top:170px;width:1040px;}
+.gd-ladder .rung{display:flex;align-items:center;gap:20px;background:var(--card-bg);border:var(--hair);border-radius:var(--radius);
+  padding:18px 26px;margin:11px 0;}
+.gd-ladder .rung.hi{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);}
+.gd-ladder .rn{flex:none;width:48px;height:48px;border-radius:11px;background:var(--accent);color:var(--accent-ink);font-family:var(--head);font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center;}
+.gd-ladder .rl{font-family:var(--head);font-size:31px;font-weight:var(--head-weight);color:var(--light);flex:none;width:320px;}
+.gd-ladder .rr{font-size:24px;font-weight:600;color:var(--dim);} .gd-ladder .rr b{color:var(--accent);}
+.gd-ladder .rung.hi .rr{color:var(--light);}
+/* compact: 6+ rungs inside the frame (per-slide "compact": true) */
+.gd-ladder.compact .rung{padding:9px 22px;}
+.gd-ladder.compact .rl{font-size:25px;width:290px;}
+.gd-ladder.compact .rr{font-size:19.5px;}
+.gd-ladder.compact .rn{width:40px;height:40px;font-size:20px;}
+
+/* value-tree driver map — the canonical árbol de valor (8 drivers) */
+/* GRAN PULIDO 2026-07-16 (carril gran-pulido, precedente 23e5862): las ramas eran
+   tarjetas planas card-bg+hair — ahora superficie con gradiente, bisel de luz y
+   sombra doble (contacto+ambiente); la raíz es una MONEDA (bisel arriba/canto abajo,
+   la gramática del paddle); el conector raíz→ramas degrada del accent al hair; los
+   chips de code van hundidos (inset) y los dots de estado son canicas mini. MISMO
+   DOM, mismos paddings (cero reflow). */
+.gd-tree{position:absolute;left:84px;right:84px;top:150px;}
+.gd-tree-root{text-align:center;margin-bottom:16px;position:relative;}
+.gd-tree-root::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:16px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 55%,var(--card-bd)),var(--card-bd));}
+.gd-tree-root span{display:inline-flex;align-items:center;gap:.5em;font-family:var(--head);font-weight:var(--head-weight);
+  font-size:26px;color:var(--accent-ink);background:var(--accent);padding:.28em .9em;border-radius:999px;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.28),inset 0 -3px 0 rgba(0,0,0,.20),
+             0 2px 4px rgba(0,0,0,.25),0 10px 24px rgba(0,0,0,.30);}
+.gd-tree-branches{display:flex;gap:20px;align-items:stretch;}
+.gd-branch{flex:1;border:var(--hair);border-radius:var(--radius-lg);padding:16px 20px 18px;display:flex;flex-direction:column;
+  background:linear-gradient(168deg,hsla(0,0%,100%,.075),hsla(0,0%,100%,.028) 65%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 2px 6px rgba(0,0,0,.22),0 16px 36px rgba(0,0,0,.28);}
+.gd-branch h4{font-family:var(--head);font-size:22px;font-weight:var(--head-weight);color:var(--light);margin:0 0 .3em;}
+.gd-drv{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px dashed color-mix(in srgb,var(--card-bd) 80%,transparent);}
+.gd-drv:first-of-type{border-top:none;}
+.gd-drv .code{flex:none;width:38px;height:30px;border-radius:8px;background:color-mix(in srgb,var(--accent) 16%,transparent);
+  color:var(--accent);font-family:var(--head);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;
+  border:1px solid color-mix(in srgb,var(--accent) 26%,transparent);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.22),inset 0 -1px 0 rgba(255,255,255,.08);}
+.gd-drv .nm{flex:1;font-size:18px;font-weight:600;color:var(--light);line-height:1.2;}
+.gd-drv .st{flex:none;width:11px;height:11px;border-radius:50%;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.42),inset 0 -1px 2px rgba(0,0,0,.30),0 1px 3px rgba(0,0,0,.30);}
+.st[data-e="modelado"]{background:var(--accent);}
+.st[data-e="parcial"]{background:#E8B54A;}
+.st[data-e="no-modelado"]{background:#C96A5E;}
+.gd-branch .bnote{margin-top:auto;padding-top:12px;font-size:15px;font-weight:600;color:var(--dim);line-height:1.35;font-style:italic;}
+.gd-branch .bnote b{color:var(--accent);font-style:normal;}
+.gd-tree-leg{display:flex;justify-content:center;gap:22px;margin-top:16px;font-size:15px;font-weight:600;color:var(--dim);}
+.gd-tree-leg span{display:inline-flex;align-items:center;gap:.5em;}
+.gd-tree-leg span::before{content:"";width:11px;height:11px;border-radius:50%;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.42),inset 0 -1px 2px rgba(0,0,0,.30),0 1px 3px rgba(0,0,0,.30);}
+.gd-tree-leg span[data-e="modelado"]::before{background:var(--accent);}
+.gd-tree-leg span[data-e="parcial"]::before{background:#E8B54A;}
+.gd-tree-leg span[data-e="no-modelado"]::before{background:#C96A5E;}
+
+/* ===== ultracode craft layer: persistent character, hand annotations, paper grain ===== */
+/* persistent corner character on content slides */
+.gd-corner{position:absolute;z-index:calc(var(--layer-z) + 4);pointer-events:none;}
+.gd-corner img{width:100%;height:auto;display:block;filter:drop-shadow(0 14px 24px rgba(0,0,0,.36));}
+
+/* hand-drawn tilted box highlight (GD signature) — outline only, never occludes text */
+.gd-box{position:absolute;border:3px solid var(--accent);border-radius:11px 13px 9px 12px/12px 9px 13px 10px;
+  filter:url(#rough3);z-index:calc(var(--layer-z) + 6);pointer-events:none;box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 8%,transparent);}
+
+/* hand-drawn wavy underline */
+.gd-underline{position:absolute;z-index:calc(var(--layer-z) + 6);pointer-events:none;}
+.gd-underline svg{display:block;filter:url(#rough2);}
+.gd-underline path{stroke:var(--accent);stroke-width:3.4;fill:none;stroke-linecap:round;}
+
+.gd-hspeech b,.gd-hspeech strong{font-weight:700;
+  background:linear-gradient(transparent 30%, color-mix(in srgb,var(--accent) 38%,transparent) 30%,
+    color-mix(in srgb,var(--accent) 38%,transparent) 82%, transparent 82%);
+  padding:0 .05em;border-radius:2px;}
+.gd-hspeech i,.gd-hspeech em{font-style:italic;font-weight:700;}
+
+/* arithmetic / equation card — a psychology-principles-style card that SHOWS the math */
+.gd-math{position:absolute;left:150px;right:150px;top:196px;background:var(--card-bg);border:var(--hair);
+  border-radius:var(--radius-lg);padding:42px 48px;box-shadow:0 24px 60px rgba(0,0,0,.28);}
+.gd-math .eq{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:nowrap;}
+.gd-math .term{text-align:center;flex:0 1 auto;}
+.gd-math .term .v{font-family:var(--head);font-size:52px;font-weight:var(--head-weight);color:var(--light);line-height:1;letter-spacing:var(--head-tracking);}
+.gd-math .term.hi .v{color:var(--accent);font-size:88px;}
+.gd-math .term .l{font-size:16px;font-weight:600;color:var(--dim);margin-top:.6em;line-height:1.25;max-width:180px;margin-left:auto;margin-right:auto;}
+.gd-math .term.hi .l{color:var(--light);font-weight:700;}
+.gd-math .op{font-family:var(--head);font-size:40px;color:var(--accent);font-weight:700;line-height:1;flex:none;}
+.gd-math .take{text-align:center;margin-top:34px;padding-top:26px;border-top:1px dashed color-mix(in srgb,var(--card-bd) 85%,transparent);
+  font-size:25px;font-weight:600;color:var(--light);line-height:1.4;}
+.gd-math .take b{color:var(--accent);}
+
+/* ===== VARIETY LAYER: typed callouts, post-its, badges, bubble variants (GD component families) ===== */
+/* typed callout cards — callout--data / insight / warning / bonus / experiment / ethics */
+/* REDISEÑO craft 2026-07-15 (carril componentes): la píldora oscura de doble borde
+   era genérica y frágil. Ahora: tarjeta con materialidad — fondo con un tinte del
+   kind, UNA sola arista de acento, chip de tipo bien resuelto (pill con halo del
+   color), sombra doble suave (contacto + ambiente) y jerarquía tipográfica.
+   MISMO DOM (.co-lbl / .co-body / .co-ic): anchors y morph-ids intactos. */
+/* GRAN PULIDO-2 2026-07-17 (REFINO sobre 23e5862, que ya puso la materialidad base):
+   eje ESCANEABLE — el cuerpo sube 17.5→19px (line-height 1.42→1.38 compensa casi
+   todo el alto) y el <b> del dato pasa a 800: el dato es el héroe, no la prosa.
+   CUIDADO: el chip gana bisel (luz arriba + contacto) y medio punto de cuerpo;
+   radio a token (--radius=14px en skin-1: mismo render). MISMO DOM y anchors. */
+.gd-callout{position:absolute;box-sizing:border-box;
+  background:linear-gradient(165deg, color-mix(in srgb, var(--co,#41CBBC) 10%, #102233), #0D1C2B 62%);
+  border:1px solid color-mix(in srgb, var(--co,#41CBBC) 28%, transparent);
+  border-left:4px solid var(--co,#41CBBC);
+  border-radius:var(--radius,14px);padding:12px 18px 15px;
+  box-shadow:0 2px 6px rgba(0,0,0,.25), 0 18px 40px rgba(0,0,0,.35),
+             inset 0 1px 0 rgba(255,255,255,.06);
+  z-index:calc(var(--layer-z) + 6);}
+.gd-callout .co-lbl{display:inline-flex;align-items:center;gap:.45em;font-size:12px;font-weight:800;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--co,#41CBBC);
+  background:color-mix(in srgb, var(--co,#41CBBC) 14%, transparent);
+  border:1px solid color-mix(in srgb, var(--co,#41CBBC) 32%, transparent);
+  padding:3px 10px 3px 8px;border-radius:999px;margin:0 0 .55em -2px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10), 0 1px 3px rgba(0,0,0,.22);}
+.gd-callout .co-body{font-size:19px;font-weight:600;color:var(--light);line-height:1.38;}
+.gd-callout .co-body b{color:var(--co,#41CBBC);font-weight:800;}
+.gd-callout .co-ic{height:1.15em;width:auto;vertical-align:-0.2em;}
+/* showcase — a big hero visual centre-stage (GD's "screen" slot) + voice on the left */
+/* GRAN PULIDO-2 2026-07-17 (precedente 1cd7ade/3a1431e): el hero visual ASIENTA —
+   anillo hairline de luz + sombra doble (contacto corta + ambiente profunda) en vez
+   de una sola sombra; el flat gana la misma doble en drop-shadow (silueta, no caja);
+   el headline gana masa de tinta (gramatica stat) y la barra del caption es un TRAZO
+   que muere (border-image), no un border plano. Radio a token (--radius=14px en
+   skin-1: mismo render). MISMO DOM, misma geometria (left/top/w intactos). */
+.gd-sc-h{position:absolute;left:84px;top:150px;width:326px;font-family:var(--head);font-size:38px;
+  font-weight:var(--head-weight);color:var(--light);line-height:1.12;letter-spacing:var(--head-tracking);
+  filter:drop-shadow(0 2px 0 rgba(0,0,0,.18)) drop-shadow(0 8px 18px rgba(0,0,0,.22));}
+.gd-sc-h b{color:var(--accent);}
+.gd-sc-cap{position:absolute;left:84px;top:398px;width:322px;font-size:19px;font-weight:600;color:var(--dim);
+  line-height:1.42;border-left:4px solid var(--accent);padding-left:16px;
+  border-image:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 22%,transparent)) 1;}
+.gd-sc-cap b{color:var(--accent);}
+.gd-sc-img.flat{border:none;background:transparent;box-shadow:none;border-radius:0;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.30)) drop-shadow(0 20px 42px rgba(0,0,0,.42));}
+.gd-sc-img{position:absolute;left:436px;top:150px;width:760px;max-height:530px;object-fit:contain;border-radius:var(--radius,14px);border:var(--hair);
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 3px 8px rgba(0,0,0,.30),0 26px 64px rgba(0,0,0,.5);}
+
+/* generic placed image — any library asset (logo/icon/badge/cutout/bg/device) */
+.gd-img{position:absolute;pointer-events:none;}
+.gd-img.shadow{filter:drop-shadow(0 8px 18px rgba(0,0,0,.30));}
+
+/* ===== more layout archetypes: timeline, big quote, card grid, horizontal process ===== */
+/* timeline — horizontal milestones */
+/* línea de hitos = process mode:"timeline" (fusión C1 2026-07-17; el renderer suelto
+   murió). Materialidad tier-A portada del bloque gd-process — GP2 saltó esta pieza y
+   traspasó el encargo (workboard): la MONEDA (bisel: luz arriba, canto abajo, sombra
+   que la despega) y el CANAL (4px, degradado accent→borde, radio) — DOM intacto. */
+.gd-timeline{position:absolute;left:90px;right:90px;}
+.gd-timeline .evs{display:flex;justify-content:space-between;position:relative;}
+.gd-timeline .evs::before{content:"";position:absolute;left:12px;right:12px;top:10px;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 45%,var(--card-bd)),var(--card-bd) 72%);
+  box-shadow:0 1px 2px rgba(0,0,0,.20);}
+.gd-timeline .ev{position:relative;text-align:center;flex:1;padding:0 6px;}
+.gd-timeline .dot{width:22px;height:22px;border-radius:50%;background:var(--accent);margin:0 auto;position:relative;z-index:1;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.30),inset 0 -3px 0 rgba(0,0,0,.22),
+             0 2px 4px rgba(0,0,0,.25),0 0 0 6px color-mix(in srgb,var(--accent) 16%,transparent);}
+.gd-timeline .yr{font-family:var(--head);font-weight:var(--head-weight);font-size:26px;color:var(--accent);margin-top:15px;
+  text-shadow:0 2px 8px rgba(0,0,0,.30);}
+.gd-timeline .lb{font-size:16px;font-weight:600;color:var(--light);margin-top:4px;line-height:1.3;}
+
+/* big pull quote */
+.gd-quotebig{position:absolute;left:120px;right:120px;top:190px;}
+.gd-quotebig .q{font-family:var(--head);font-style:italic;font-weight:var(--head-weight);font-size:46px;line-height:1.26;color:var(--light);}
+.gd-quotebig .q b{color:var(--accent);font-style:normal;}
+.gd-quotebig .q::before{content:"\201C";color:var(--accent);} .gd-quotebig .q::after{content:"\201D";color:var(--accent);}
+.gd-quotebig .by{margin-top:28px;font-size:22px;font-weight:700;color:var(--accent);} .gd-quotebig .by::before{content:"— ";}
+
+/* labelled card grid */
+.gd-grid{position:absolute;left:84px;right:84px;display:grid;gap:22px;}
+.gd-grid.c2{grid-template-columns:1fr 1fr;} .gd-grid.c3{grid-template-columns:1fr 1fr 1fr;} .gd-grid.c4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.gd-gcard{background:var(--card-bg);border:var(--hair);border-radius:var(--radius-lg);padding:24px 26px;}
+.gd-gcard .gi{height:46px;width:auto;margin-bottom:13px;object-fit:contain;}
+.gd-gcard .h{font-family:var(--head);font-size:25px;font-weight:var(--head-weight);color:var(--light);margin-bottom:.28em;line-height:1.15;}
+.gd-gcard .h .n{color:var(--accent);margin-right:.35em;}
+.gd-gcard .b{font-size:18px;font-weight:600;color:var(--dim);line-height:1.42;} .gd-gcard .b b{color:var(--accent);}
+
+/* horizontal numbered process */
+/* GRAN PULIDO-2 2026-07-17 (precedente 9d986f9/1cd7ade; FUSIONES C1 absorbe timeline
+   en esta pieza — llevad esta materialidad al mode timeline): el numero es una MONEDA
+   (bisel luz arriba / canto abajo + sombra contacto+ambiente, gramatica vs-mid/
+   tree-root) con la cifra 28→30px dentro del circulo FIJO de 64px (cero reflow);
+   el conector es un TRAZO direccional (gradiente que sale del accent de la moneda y
+   muere en card-bd, con radio) y el label gana lift. MISMO DOM y anchors. */
+.gd-process{position:absolute;left:84px;right:84px;display:flex;align-items:flex-start;}
+.gd-pstep{flex:1;text-align:center;position:relative;padding:0 12px;}
+.gd-pstep .pn{width:64px;height:64px;border-radius:50%;background:var(--accent);color:var(--accent-ink);
+  font-family:var(--head);font-weight:800;font-size:30px;display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative;z-index:1;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.30),inset 0 -3px 0 rgba(0,0,0,.22),
+             0 2px 4px rgba(0,0,0,.25),0 10px 22px rgba(0,0,0,.30);}
+.gd-pstep .pl{font-family:var(--head);font-size:28px;font-weight:var(--head-weight);color:var(--light);margin-top:13px;line-height:1.15;
+  text-shadow:0 2px 8px rgba(0,0,0,.30);}
+.gd-pstep .pnote{font-size:19px;font-weight:600;color:var(--dim);margin-top:5px;line-height:1.32;} .gd-pstep .pnote b{color:var(--accent);}
+.gd-pstep:not(:last-child)::after{content:"";position:absolute;top:31px;left:64%;right:-36%;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 45%,var(--card-bd)),var(--card-bd) 72%);
+  box-shadow:0 1px 2px rgba(0,0,0,.20);}
+.co-data{--co:#41CBBC;} .co-insight{--co:#F5C64A;} .co-warning{--co:#E5735E;}
+.co-bonus{--co:#B98BE0;} .co-experiment{--co:#5AC8E0;} .co-ethics{--co:#7FB98B;}
+
+/* post-it / sticky note — Kalam, tape, rotation, colours */
+.gd-postit{position:absolute;box-sizing:border-box;font-family:var(--hand,'Kalam',cursive);font-size:22px;font-weight:400;line-height:1.26;
+  color:#2b2a21;background:#F6DE72;padding:20px 20px 22px;box-shadow:0 14px 24px rgba(0,0,0,.34);z-index:calc(var(--layer-z) + 6);}
+.gd-postit::before{content:"";position:absolute;left:50%;top:-10px;transform:translateX(-50%) rotate(-3deg);
+  width:82px;height:22px;background:rgba(240,240,245,.42);box-shadow:0 2px 6px rgba(0,0,0,.16);}
+.gd-postit.red{background:#F4A79E;} .gd-postit.green{background:#A6E0AE;} .gd-postit.blue{background:#A6D2F4;} .gd-postit.pink{background:#F2B4D4;}
+.gd-postit b{font-weight:700;}
+
+/* verdict paddle / badge — yes / no / maybe / up / down
+   REDISEÑO craft 2026-07-15 (carril componentes): era un círculo plano — ahora es
+   una PALA de veredicto: mango de madera (::after), bisel (luz arriba, canto abajo),
+   gradiente de cara y la ligera rotación de una mano que la levanta. Mismo DOM. */
+.gd-paddle{position:absolute;min-width:48px;height:48px;padding:0 13px;border-radius:26px;
+  display:inline-flex;align-items:center;justify-content:center;gap:.3em;
+  font-family:var(--head);font-weight:800;font-size:22px;color:#fff;
+  transform:rotate(-4deg);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.28), inset 0 -3px 0 rgba(0,0,0,.22),
+             0 2px 4px rgba(0,0,0,.25), 0 10px 22px rgba(0,0,0,.35);
+  z-index:calc(var(--layer-z) + 7);}
+.gd-paddle::after{content:"";position:absolute;left:50%;top:100%;width:11px;height:26px;
+  margin-left:-5.5px;margin-top:-4px;border-radius:6px 6px 8px 8px;
+  background:linear-gradient(180deg, #C89B6A, #A87C4F);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.30), 0 6px 12px rgba(0,0,0,.30);
+  z-index:-1;}
+.gd-paddle .pl{font-size:14px;font-weight:800;letter-spacing:.06em;}
+.gd-paddle.yes,.gd-paddle.up{background:linear-gradient(180deg,#36C57F,#27A264);}
+.gd-paddle.no,.gd-paddle.down{background:linear-gradient(180deg,#EB6448,#D14A31);}
+.gd-paddle.maybe{background:linear-gradient(180deg,#F2C25B,#DCA53C);color:#1a1512;}
+
+/* bubble shape variants + rotation + tint */
+.gd-hspeech.thought{border-radius:34px;}
+.gd-hspeech.thought::after{border:none;background:#fff;width:15px;height:15px;border-radius:50%;
+  box-shadow:-13px 12px 0 -3px #fff,-24px 22px 0 -6px #fff;}
+.gd-hspeech.tint{background:color-mix(in srgb,var(--accent) 15%,#fff);}
+.gd-hspeech.tint::after{background:color-mix(in srgb,var(--accent) 15%,#fff);}
+
+/* persistent vertical progress rail on the far-left edge (GD signature #4) */
+.gd-rail{position:absolute;left:16px;top:28px;bottom:28px;width:5px;border-radius:3px;
+  background:color-mix(in srgb,var(--card-bd) 65%,transparent);z-index:calc(var(--layer-z) + 8);overflow:hidden;}
+.gd-rail .fill{position:absolute;left:0;bottom:0;width:100%;border-radius:3px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 70%,transparent),var(--accent));}
+
+/* subtle paper grain over the whole deck — warmth, not sterile flat vector */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9990;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='ng'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ng)'/%3E%3C/svg%3E");}
+
+/* ===== free-composition blocks + finesse layer (references/gd-visual-system.md) =====
+   type scale 64/52/28/21/16 · one accent · generous leading. Each block is a bespoke,
+   hand-placed primitive; inline style overrides position/size/weight per slide. */
+.gd-fb{position:absolute;}
+.gd-fb-kicker{font:800 20px/1.1 var(--body);text-transform:uppercase;letter-spacing:.14em;color:var(--accent);}
+.gd-fb-headline{font-family:var(--head);font-size:60px;line-height:1.02;font-weight:var(--head-weight);
+  color:var(--light);letter-spacing:var(--head-tracking);text-wrap:balance;}
+.gd-fb-headline b,.gd-fb-headline em{color:var(--accent);font-style:normal;}
+.gd-fb-subhead{font-family:var(--head);font-size:28px;line-height:1.16;font-weight:700;color:var(--light);}
+.gd-fb-subhead b,.gd-fb-subhead em{color:var(--accent);font-style:normal;}
+.gd-fb-body{font-size:21px;line-height:1.5;font-weight:500;color:var(--dim);}
+.gd-fb-body b{color:var(--light);font-weight:700;}
+.gd-fb-quote{font-family:var(--head);font-size:46px;line-height:1.1;font-weight:700;color:var(--light);}
+.gd-fb-quote b,.gd-fb-quote em{color:var(--accent);font-style:normal;}
+.gd-fb-quote .fb-by{font-family:var(--body);font-size:19px;font-weight:600;color:var(--dim);margin-top:.55em;}
+.gd-fb-number .fb-n{font-variant-numeric:lining-nums;font-family:var(--head);font-size:150px;line-height:.9;font-weight:var(--head-weight);
+  color:var(--accent);letter-spacing:var(--head-tracking);}
+.gd-fb-number .fb-nl{font:800 22px/1.2 var(--body);text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:.35em;}
+.gd-fb-number .fb-nc{font-size:21px;line-height:1.42;color:var(--dim);margin-top:.5em;max-width:440px;}
+.gd-fb-figure,.gd-fb-image{display:block;}
+.gd-fb-figure.shadow,.gd-fb-image.shadow{filter:drop-shadow(0 26px 52px rgba(0,0,0,.5));}
+.gd-fb-callout{border-radius:16px;padding:18px 22px;background:hsla(0,0%,100%,.05);
+  border:1px solid var(--line);border-left-width:4px;backdrop-filter:blur(6px);}
+.gd-fb-callout .fb-co-t{font:700 26px/1.12 var(--head);color:var(--light);margin-bottom:.3em;}
+.gd-fb-callout .fb-co-b{font-size:21px;line-height:1.42;color:var(--dim);}
+.gd-fb-callout .fb-co-s{font-size:15px;color:var(--dim);opacity:.7;margin-top:.6em;}
+.gd-fb-callout.co-psychology{border-left-color:#b98cff;}
+.gd-fb-callout.co-ux{border-left-color:#5ad1c4;}
+.gd-fb-callout.co-ethics{border-left-color:#ffcf6b;}
+.gd-fb-callout.co-data{border-left-color:var(--accent);}
+.gd-fb-panel-glass{background:hsla(0,0%,100%,.04);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(4px);}
+.gd-fb-panel-outline{border:1.5px solid var(--line);border-radius:20px;}
+.gd-fb-panel-solid{background:rgba(8,20,32,.55);border-radius:20px;}
+.gd-fb-rule{background:var(--accent);border-radius:2px;}
+
+/* overlay card — the GD "insight" card that pops OVER the composition, on a dimmer */
+.gd-dim{position:absolute;inset:0;background:rgba(3,10,16,.62);z-index:calc(var(--layer-z) + 19);}
+.gd-overlay{position:absolute;box-sizing:border-box;z-index:calc(var(--layer-z) + 20);background:#FBFBFC;color:#1d2730;
+  border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.55);padding:26px 30px 22px;
+  border-left:7px solid var(--ov,#e56a8e);}
+.gd-overlay .ov-k{display:flex;align-items:center;gap:10px;font:800 15px/1 var(--body);
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ov,#e56a8e);}
+.gd-overlay .ov-k .em{font-size:22px;}
+.gd-overlay h3{font:700 30px/1.15 var(--body);color:#12181f;margin:.35em 0 .35em;}
+.gd-overlay .ov-b{font:500 19.5px/1.5 var(--body);color:#3c4854;}
+.gd-overlay .ov-b b{color:#12181f;font-weight:700;}
+.gd-overlay .ov-b .no{color:#c94f4f;font-style:italic;}
+.gd-overlay .ov-b .si{color:#2e9e6b;font-style:italic;}
+.gd-overlay .ov-f{border-top:1px solid #e3e7ea;margin-top:16px;padding-top:10px;
+  font:500 13px/1.5 var(--body);color:#8a97a2;}
+.gd-overlay .ov-f sup{color:var(--ov,#e56a8e);margin-right:4px;}
+
+/* scorebar — the Grammarly-style lateral thermometer: a score that LIVES the story.
+   Animates across sequence beats via keyframe "deco" overrides. */
+/* GRAN PULIDO-2 2026-07-17 (precedente 3a1431e/1cd7ade): el termómetro gana CUERPO —
+   el track es un CANAL hundido (inset arriba + luz abajo), el fill es LÍQUIDO
+   (bisel lateral de cilindro + glow del color + MENISCO ::before, tapa brillante),
+   y el val es el HÉROE: 19→22px con bisel de moneda (gramática paddle/vs-mid).
+   Los verdes/corales son literales del eje veredicto (no hay --ok/--bad en skin).
+   MISMO DOM y morph-ids (gd-sb-fill/val/dlt/lbl tweenean igual); el ::before del
+   fill viaja con él. Dedupe de una regla .sb-r .lbl repetida. */
+.gd-scorebar{position:absolute;top:44px;bottom:44px;width:16px;border-radius:8px;
+  background:hsla(0,0%,100%,.10);border:1px solid hsla(0,0%,100%,.14);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.32),inset 0 -1px 0 rgba(255,255,255,.08);
+  z-index:calc(var(--layer-z) + 8);}
+.gd-scorebar.sb-l{left:38px;} .gd-scorebar.sb-r{right:38px;}
+.gd-scorebar .fill{position:absolute;bottom:0;left:0;width:100%;border-radius:6px;
+  background:#37b26b;transition:height .45s;
+  box-shadow:inset 1px 0 1px rgba(255,255,255,.28),inset -2px 0 3px rgba(0,0,0,.22),
+             0 0 14px rgba(55,178,107,.35);}
+.gd-scorebar .fill::before{content:"";position:absolute;left:1px;right:1px;top:0;height:4px;
+  border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,rgba(255,255,255,.50),rgba(255,255,255,.06));}
+.gd-scorebar.sb-bad .fill{background:#E5735E;
+  box-shadow:inset 1px 0 1px rgba(255,255,255,.28),inset -2px 0 3px rgba(0,0,0,.22),
+             0 0 14px rgba(229,115,94,.35);}
+.gd-scorebar .val{position:absolute;left:26px;transform:translateY(50%);
+  font:800 22px/1 var(--body);color:#fff;background:#37b26b;border-radius:9px;
+  padding:8px 13px;white-space:nowrap;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.26),inset 0 -3px 0 rgba(0,0,0,.20),
+             0 2px 4px rgba(0,0,0,.25),0 8px 20px rgba(0,0,0,.32);}
+.gd-scorebar.sb-r .val{left:auto;right:26px;}
+.gd-scorebar.sb-r .lbl{left:auto;right:26px;}
+.gd-scorebar.sb-bad .val{background:#E5735E;}
+.gd-scorebar .lbl{position:absolute;left:26px;bottom:-2px;font:700 11.5px/1.2 var(--body);
+  letter-spacing:.06em;text-transform:uppercase;color:var(--dim);white-space:nowrap;
+  text-shadow:0 1px 3px rgba(0,0,0,.30);}
+
+/* goaltracker — the Duolingo-style mission widget (scene-patterns §5): avatar +
+   "GOAL #N OF M" + emoji node row (done/current/pending). Chrome: aura-exempt.
+   Advances across sequence beats via keyframe "deco" overrides. */
+.gd-goaltracker{position:absolute;display:flex;align-items:center;gap:14px;z-index:calc(var(--layer-z) + 8);
+  box-sizing:border-box;background:var(--card-bg);border:1px solid var(--card-bd);
+  border-radius:16px;padding:12px 18px;}
+.gd-goaltracker .ava{width:56px;height:56px;border-radius:50%;overflow:hidden;flex:none;
+  border:2.5px solid var(--accent);background:var(--card-bg);}
+.gd-goaltracker .ava img{width:100%;height:100%;object-fit:cover;object-position:50% 12%;}
+.gd-goaltracker .lbl{font:800 11.5px/1.2 var(--body);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--dim);white-space:nowrap;}
+.gd-goaltracker .name{font:700 15.5px/1.25 var(--body);color:var(--light);
+  margin-top:2px;max-width:260px;}
+.gd-goaltracker .nodes{display:flex;gap:8px;margin-top:7px;}
+.gd-goaltracker .nd{width:32px;height:32px;border-radius:50%;box-sizing:border-box;flex:none;
+  display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--body);
+  background:hsla(0,0%,100%,.10);border:2px solid transparent;filter:grayscale(1);opacity:.45;}
+.gd-goaltracker .nd.done{background:#37b26b;color:#fff;filter:none;opacity:1;}
+.gd-goaltracker .nd.cur{border-color:var(--accent);background:hsla(0,0%,100%,.16);
+  filter:none;opacity:1;box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 25%,transparent);}
+
+/* lens — the zoom magnifier (scene-patterns §6): a REGION of a screenshot enlarged
+   straight from the spec (background-position/-size math; no hand-cropped assets),
+   plus optional connection beams back to the origin point. */
+/* REDISEÑO craft 2026-07-15 (carril componentes): que parezca LUPA de verdad —
+   cristal con brillo diagonal (::after), aro metálico con bisel (cantos interior y
+   exterior), sombra PROYECTADA de contacto + ambiente, y haces punteados orgánicos
+   (puntos redondos + filtro rough del deck). El zoom sigue siendo background-* del
+   spec; mismo DOM y anchors. */
+.gd-lens{position:absolute;box-sizing:border-box;border-radius:18px;
+  border:3px solid #E8ECF1;
+  background-repeat:no-repeat;background-color:#fff;
+  z-index:calc(var(--layer-z) + 7);
+  box-shadow:0 0 0 1.5px rgba(20,32,44,.55),
+             inset 0 0 0 1px rgba(20,32,44,.28),
+             inset 0 14px 26px rgba(255,255,255,.12),
+             0 10px 18px rgba(0,0,0,.30), 0 30px 60px rgba(0,0,0,.45);}
+.gd-lens::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
+  background:linear-gradient(118deg, rgba(255,255,255,.28) 0%, rgba(255,255,255,.09) 18%, transparent 32%),
+             radial-gradient(120% 90% at 88% 110%, rgba(13,28,43,.14), transparent 55%);}
+.gd-lensbeams{position:absolute;z-index:calc(var(--layer-z) + 6);pointer-events:none;}
+.gd-lensbeams svg{filter:url(#rough2);}
+.gd-lensbeams line{stroke:hsla(174,52%,74%,.62);stroke-width:2.4;stroke-dasharray:1 9;stroke-linecap:round;}
+
+/* --- text balance (added: GD hand-breaks titles; we auto-wrap) ------------------
+   balance short display text and avoid single-word widows. ponytail: balance for
+   titles, pretty for multi-line body/captions; upgrade to measured hand-breaks only
+   if balance falls short. */
+.gd-mtitle,.gd-cover h1,.gd-principle h2,.gd-quote,.gd-divider,.gd-idea .txt,.gd-stat,
+.gd-sc-h,.gd-bars h2,.gd-cheat h2,.gd-poll h2,.gd-theory h4,.gd-fb-headline,.gd-fb-subhead{text-wrap:balance;}
+.gd-caption,.gd-hspeech,.gd-speech,.gd-fb-body,.gd-fb-callout,.gd-postit,.gd-theory p{text-wrap:pretty;}
+/* -------------------------------------------------------------------------------- */
+
+/* ---------- the cursor (hud) — 1.526 uses in 67/67 corpus decks -------------------
+   Drawn in CSS, not shipped as art: GD's own cursors are Bitmoji/GD assets (study-only),
+   and a pointer is two shapes. Ship-safe, scales, and animates for free. */
+.gd-cursor{position:absolute;pointer-events:none;width:0;height:0;}
+.gd-cursor i{position:absolute;display:block;}
+
+/* desktop (491 uses): the classic arrow, drawn with a clip-path so it stays crisp */
+.gd-cursor--desktop i{width:22px;height:32px;background:#fff;
+  clip-path:polygon(0 0, 0 23px, 5.5px 18px, 9px 27px, 13.5px 25px, 10px 16.5px, 17px 16px);
+  filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 0 .6px rgba(0,0,0,.9));}
+
+/* mobile (1059 uses): the tap disc — a translucent finger-pad with a ring.
+   Dark fill + white ring + dark shadow ON PURPOSE: this piece lives on top of a product
+   screenshot, and those are overwhelmingly LIGHT. An all-white pad vanishes exactly where
+   the cursor has to do its job. Reads on both. */
+.gd-cursor--mobile i{width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;
+  background:hsla(212,25%,12%,.30);border:2.5px solid hsla(0,0%,100%,.95);
+  box-shadow:0 2px 10px rgba(0,0,0,.45), 0 0 0 1.5px hsla(212,25%,12%,.55),
+             inset 0 0 10px hsla(212,25%,12%,.25);}
+
+/* travel: it ARRIVES from --tx/--ty instead of teleporting (334 of the corpus animate) */
+.gd-cursor--anim i{animation:gd-cur-travel .9s cubic-bezier(.22,1,.36,1) both;}
+@keyframes gd-cur-travel{from{transform:translate(var(--tx,-90px), var(--ty,60px));}
+                         to{transform:translate(0,0);}}
+
+/* tap: the click actually lands */
+.gd-cursor--tap::after{content:"";position:absolute;left:0;top:0;width:38px;height:38px;
+  margin:-19px 0 0 -19px;border-radius:50%;border:2px solid hsla(0,0%,100%,.9);
+  box-shadow:0 0 0 1px hsla(212,25%,12%,.4);
+  animation:gd-cur-tap 1.1s ease-out .75s infinite;}
+@keyframes gd-cur-tap{0%{transform:scale(.5);opacity:.9;} 100%{transform:scale(2.1);opacity:0;}}
+
+@media (prefers-reduced-motion:reduce){
+  .gd-cursor--anim i{animation:none;}
+  .gd-cursor--tap::after{animation:none;opacity:.5;}
+}
+
+/* ---------- anim-laptop-open (subject) — 23 usos en 13 decks del corpus ------------
+   La tapa SUBE sobre su bisagra (el borde inferior de la pantalla). Reconstruido desde
+   la intención: el CSS de GD vive en offline-v2.css, que el corpus nunca capturó.
+   Se dispara al LLEGAR a la slide (o al aterrizar su beat), nunca al cargar la página:
+   todas las secciones están en el DOM desde el principio, así que una animación normal
+   habría terminado antes de que el lector llegue. */
+.gd-desktop--open{transform-origin:50% 100%;}
+.reveal section.present .gd-desktop--open:not(.fragment),
+.reveal section.present .gd-desktop--open.fragment.visible{
+  animation:gd-laptop-open .85s cubic-bezier(.2,.7,.3,1) both;}
+@keyframes gd-laptop-open{
+  from{transform:perspective(1400px) rotateX(-88deg);opacity:.35;}
+  60%{opacity:1;}
+  to{transform:perspective(1400px) rotateX(0);opacity:1;}}
+
+@media (prefers-reduced-motion:reduce){
+  .reveal section.present .gd-desktop--open:not(.fragment),
+  .reveal section.present .gd-desktop--open.fragment.visible{animation:none;}}
+
+/* ---------- indicador de delta del marcador (hud) — 1.088 usos en el corpus ---------
+   El salto ES el argumento: sin él el lector tiene que restar dos números de memoria.
+   El color NO se elige: lo deriva `beat` del signo (components/furniture.py::_beat), así
+   que un delta negativo en verde es imposible, no solo improbable. */
+/* Va DEBAJO del valor y en su mismo lado (.val = left:26px, translateY(50%) → centrado en
+   pct): se leen como pareja «cuánto marca / cuánto se movió». Centrado sobre la barra se
+   comía el badge del valor, que están los dos anclados al mismo pct. Más pequeño y sin
+   fondo sólido: el delta es el subtexto del número, no un segundo titular. */
+.gd-scorebar .dlt{position:absolute;left:26px;transform:translateY(calc(50% + 34px));
+  font:800 13px/1 var(--body);letter-spacing:.02em;padding:2px 7px 3px;border-radius:7px;
+  white-space:nowrap;pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 1px 2px rgba(0,0,0,.20);}
+.gd-scorebar.sb-r .dlt{left:auto;right:26px;}
+.gd-scorebar .dlt.dn{background:hsla(11,74%,54%,.22);color:#F0A28E;}
+.gd-scorebar .dlt.up{background:hsla(150,55%,44%,.22);color:#7FD9A8;}
+
+/* ===== bg_video — el backdrop cinemagraph (carril vídeo) ===== */
+/* Reutiliza la caja de .gd-photobg (full-bleed + .ov); el <video> cubre como el img.
+   .vposter es el MISMO frame en quieto: reduced-motion lo muestra y esconde el vídeo
+   — la slide se lee idéntica, solo congelada. El play/pause por slide lo lleva
+   video-runtime.js (inyectado solo si el deck usa vídeo). */
+.gd-bgvideo video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.gd-bgvideo .vposter{display:none;}
+@media (prefers-reduced-motion: reduce){
+  .gd-bgvideo video{display:none;}
+  .gd-bgvideo .vposter{display:block;}
+}
+/* SKIN 1 — Anlak Editorial (chosen; deepest craft): navy/teal, serif authority,
+   orb + dot-grid + inset plate, editorial microcomponents. */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+:root{
+  --accent:#41CBBC; --accent-2:#5AA9E6; --accent-ink:#05231F;
+  --bg:#0A1A29; --card-bg:hsla(188,40%,78%,.06); --card-bd:hsla(188,40%,78%,.15);
+  --light:#EAF3F4; --dim:#89A2AC; --line:hsla(190,30%,72%,.28);
+  --head:'Fraunces',Georgia,serif; --body:'Inter',sans-serif;
+  --head-weight:600; --head-tracking:-.005em;
+  --radius:14px; --radius-lg:16px; --pill:999px; --card-pad:40px 46px;
+  --shadow:0 22px 60px rgba(0,10,20,.45); --underline:var(--accent); --underline-h:.12em;
+  --hair:1px solid var(--card-bd);
+}
+/* background craft: warm orb top-right + cool orb bottom-left + fine dot grid */
+.reveal .slides::before{
+  background:
+    radial-gradient(620px 420px at 90% -8%, hsla(174,55%,45%,.16), transparent 62%),
+    radial-gradient(560px 520px at -6% 112%, hsla(205,60%,45%,.12), transparent 60%),
+    radial-gradient(hsla(188,45%,72%,.055) 1.1px, transparent 1.2px);
+  background-size:auto,auto,26px 26px; background-position:0 0,0 0,0 0;}
+/* inset editorial plate frame + corner ticks */
+.reveal .slides::after{content:"";position:absolute;inset:34px;border:1px solid hsla(188,40%,72%,.16);
+  border-radius:3px;pointer-events:none;z-index:0;}
+/* refined type */
+.gd-cover h1{font-size:74px;font-weight:600;}
+.gd-cover h1 em{font-style:italic;color:var(--accent);}
+.gd-badge{background:transparent;border:1px solid var(--line);color:var(--dim);font-family:'Inter';
+  font-weight:600;letter-spacing:.18em;font-size:15px;padding:7px 20px;}
+.gd-principle h2 .u{box-shadow:inset 0 -.12em 0 color-mix(in srgb,var(--accent) 55%,transparent);}
+.gd-qcard{border-radius:16px;background:linear-gradient(180deg,hsla(188,40%,78%,.08),hsla(188,40%,78%,.03));
+  border:1px solid hsla(188,45%,75%,.20);box-shadow:var(--shadow);}
+.gd-qcard .qnum{border-radius:11px;font-family:var(--head);box-shadow:0 6px 18px hsla(174,60%,30%,.4);}
+.gd-qcard .stakes b,.gd-caption b{color:var(--accent);}
+.gd-eyebrow{color:var(--accent);}
+.gd-idea{background:linear-gradient(180deg,hsla(188,40%,78%,.07),transparent);}
+.gd-matrix .bub .dot{background:var(--accent);}
+.gd-mcap{border-left-color:var(--accent);}
+.gd-src b{color:var(--accent);}
+.gd-divider .pn{background:linear-gradient(180deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent;opacity:.9;}
+
+
+/* THE LAYER ONTOLOGY — generated from generator/components/layers.py.
+   Do not hand-edit and do not add z-index elsewhere: a piece declares what
+   it IS (data-layer) and its depth follows. */
+[data-layer="backdrop"]{--layer-z:100;z-index:var(--layer-z);}
+[data-layer="subject"]{--layer-z:200;z-index:var(--layer-z);}
+[data-layer="annotation"]{--layer-z:300;z-index:var(--layer-z);}
+[data-layer="hud"]{--layer-z:400;z-index:var(--layer-z);}
+[data-layer="overlay"]{--layer-z:450;z-index:var(--layer-z);}
+[data-layer="chrome"]{--layer-z:500;z-index:var(--layer-z);}
+.reveal .slides section > *:not([data-layer]){--layer-z:200;z-index:var(--layer-z);}
+
+/* ---- engine de anotación (core/annotate.ts) ---- */
+.fd-ann-note{position:absolute;font-family:var(--hand);font-weight:700;font-size:21px;
+  line-height:1.15;color:var(--fd-ann-tone,var(--sticker-bg,#FCE9A6));
+  transform:rotate(var(--fd-ann-rot,-2deg));
+  text-shadow:0 1px 3px rgba(0,0,0,.45),0 3px 14px rgba(0,0,0,.38);}
+.fd-ann-note b{font-weight:700;background:linear-gradient(transparent 62%,
+  color-mix(in srgb,var(--fd-ann-tone,var(--sticker-bg,#FCE9A6)) 34%,transparent) 0);}
+.fd-ann-note i{font-style:italic;}
+.fd-ann-arr path{stroke-dasharray:1;stroke-dashoffset:0;}
+.fd-ann-measure{position:absolute;height:12px;
+  filter:drop-shadow(0 5px 10px rgba(0,0,0,.32));}
+.fd-ann-measure .ln{position:absolute;left:0;right:0;top:5px;height:1.5px;border-radius:1px;
+  background:color-mix(in srgb,var(--fd-ann-tone,var(--accent)) 75%,transparent);}
+.fd-ann-measure .t{position:absolute;top:0;width:1.5px;height:11px;border-radius:1px;
+  background:color-mix(in srgb,var(--fd-ann-tone,var(--accent)) 55%,transparent);}
+.fd-ann-measure .t.l{left:0;}.fd-ann-measure .t.r{right:0;}
+.fd-ann-measure .chip{position:absolute;left:50%;top:0;white-space:nowrap;
+  transform:translate(-50%,-58%) rotate(-2deg);
+  font-family:var(--hand);font-weight:700;font-size:16px;line-height:1;color:var(--light);
+  padding:5px 12px;border-radius:11px;
+  background:color-mix(in srgb,var(--fd-ann-tone,var(--accent)) 22%,var(--bg));
+  box-shadow:0 4px 10px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 0 0 1px color-mix(in srgb,var(--fd-ann-tone,var(--accent)) 48%,transparent);}
+.gd-ring.fd-ann-ring{border-color:var(--fd-ring,var(--accent));
+  transform:rotate(var(--fd-ring-rot,-6deg));
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--fd-halo,var(--fd-ring,var(--accent))) 26%,transparent),
+    0 0 24px 5px color-mix(in srgb,var(--fd-halo,var(--fd-ring,var(--accent))) 22%,transparent);}
+.gd-ring.fd-ann-ring--rect{border-radius:var(--fd-ring-r,12px);--fd-ring-rot:0deg;}
+.gd-ring.fd-ann-anch{width:auto;height:auto;}
+@supports not (anchor-name: --a){.gd-ring.fd-ann-anch{display:none;}}
+.reveal section.present .fd-ann-arr:is(:not(.fragment),.fragment.visible) path{
+  animation:fd-ann-draw .42s cubic-bezier(.4,0,.2,1) calc(var(--fd-ann-delay,0s) + .05s) both;}
+.reveal section.present .fd-ann-arr:is(:not(.fragment),.fragment.visible) .head{
+  animation:fd-ann-in .18s ease-out calc(var(--fd-ann-delay,0s) + .4s) both;}
+.reveal section.present .fd-ann-note:is(:not(.fragment),.fragment.visible){
+  animation:fd-ann-note .34s cubic-bezier(.22,.75,.32,1.06) calc(var(--fd-ann-delay,0s) + .3s) both;}
+.reveal section.present .fd-ann-measure:is(:not(.fragment),.fragment.visible) .ln{
+  animation:fd-ann-span .38s cubic-bezier(.3,.55,.25,1) var(--fd-ann-delay,0s) both;}
+.reveal section.present .fd-ann-measure:is(:not(.fragment),.fragment.visible) .t{
+  animation:fd-ann-in .2s ease-out calc(var(--fd-ann-delay,0s) + .26s) both;}
+.reveal section.present .fd-ann-measure:is(:not(.fragment),.fragment.visible) .chip{
+  animation:fd-ann-spring .3s cubic-bezier(.34,1.5,.5,1) calc(var(--fd-ann-delay,0s) + .3s) both;}
+.reveal section.present .gd-ring.fd-ann-ring:is(:not(.fragment),.fragment.visible){
+  animation:fd-ann-ringin .5s cubic-bezier(.3,.9,.35,1.18) var(--fd-ann-delay,0s) both,
+    fd-ann-breathe 2.6s ease-in-out calc(var(--fd-ann-delay,0s) + .62s) infinite;}
+@keyframes fd-ann-draw{from{stroke-dashoffset:1;}}
+@keyframes fd-ann-in{from{opacity:0;}}
+@keyframes fd-ann-note{from{opacity:0;
+  transform:rotate(var(--fd-ann-rot,-2deg)) translateY(6px);}}
+@keyframes fd-ann-span{from{transform:scaleX(0);}}
+@keyframes fd-ann-spring{from{opacity:0;
+  transform:translate(-50%,-58%) rotate(-2deg) scale(.6);}}
+@keyframes fd-ann-ringin{from{opacity:0;
+  transform:rotate(var(--fd-ring-rot,-6deg)) scale(1.07);}}
+@keyframes fd-ann-breathe{
+  0%,100%{box-shadow:0 0 0 5px color-mix(in srgb,var(--fd-halo,var(--fd-ring,var(--accent))) 26%,transparent),
+    0 0 24px 5px color-mix(in srgb,var(--fd-halo,var(--fd-ring,var(--accent))) 22%,transparent);}
+  50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--fd-halo,var(--fd-ring,var(--accent))) 36%,transparent),
+    0 0 30px 7px color-mix(in srgb,var(--fd-halo,var(--fd-ring,var(--accent))) 30%,transparent);}}
+@media (prefers-reduced-motion: reduce), print{
+  .reveal section.present .fd-ann-arr:is(:not(.fragment),.fragment.visible) :is(path,.head),
+  .reveal section.present .fd-ann-note:is(:not(.fragment),.fragment.visible),
+  .reveal section.present .fd-ann-measure:is(:not(.fragment),.fragment.visible) :is(.ln,.t,.chip),
+  .reveal section.present .gd-ring.fd-ann-ring:is(:not(.fragment),.fragment.visible){
+    animation:none;}
+}
+
+/* ---- foundry: blockrail (core/components/foundry/blockrail.ts) ---- */
+.fd-blockrail{position:absolute;left:auto;right:84px;top:46px;box-sizing:border-box;
+  display:inline-flex;align-items:center;column-gap:12px;padding:8px 15px;min-height:32px;
+  background:var(--card-bg);border:1px solid var(--card-bd);border-radius:var(--pill);
+  box-shadow:0 12px 26px rgba(0,0,0,.36),0 2px 6px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.15),inset 0 -1px 0 rgba(0,0,0,.22);}
+.fd-blockrail .lab{font-family:var(--body);font-weight:800;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--light);white-space:nowrap;}
+.fd-blockrail .segs{display:inline-flex;align-items:center;column-gap:5px;}
+.fd-blockrail .dots{display:inline-flex;align-items:center;column-gap:8px;}
+/* paso futuro = CUENCO rebajado (un hueco esperando); hecho = loseta accent con luz */
+.fd-blockrail .seg{position:relative;flex:none;width:16px;height:8px;
+  border-radius:var(--pill);background:rgba(0,0,0,.30);
+  box-shadow:inset 0 1.5px 2.5px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.08);}
+.fd-blockrail .seg.on{background:color-mix(in srgb,var(--accent) 42%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26),inset 0 -1px 1px rgba(0,0,0,.26);}
+.fd-blockrail .dot{position:relative;flex:none;width:9px;height:9px;border-radius:50%;
+  background:rgba(0,0,0,.30);
+  box-shadow:inset 0 1.5px 2px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.08);}
+.fd-blockrail .dot.on{background:color-mix(in srgb,var(--accent) 50%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 1px rgba(0,0,0,.26);}
+/* EL MARCADOR — un solo data-id (fd-brl-marker): entre slides auto-animate lo
+   DESLIZA del paso 3 al 4; dentro de la slide LATE suave (respira, no grita) */
+.fd-blockrail .mk{position:absolute;inset:-1px;border-radius:var(--pill);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 72%,#fff),
+    var(--accent) 52%,color-mix(in srgb,var(--accent) 78%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 1px 3px rgba(0,0,0,.35),
+    0 0 8px color-mix(in srgb,var(--accent) 40%,transparent);
+  animation:fd-brl-pulse 2.6s ease-in-out infinite;}
+.fd-blockrail .dot .mk{border-radius:50%;}
+/* breadcrumb: labels encadenados; el activo lleva el subrayado-marcador debajo */
+.fd-blockrail .crumb{position:relative;font-family:var(--body);font-weight:800;
+  font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
+  color:color-mix(in srgb,var(--dim) 60%,transparent);}
+.fd-blockrail .crumb.done{color:var(--dim);}
+.fd-blockrail .crumb.cur{color:var(--light);}
+.fd-blockrail .crumb .mk{inset:auto -1px -5px -1px;height:3px;}
+.fd-blockrail .sep{font-family:var(--body);font-weight:700;font-size:11px;
+  color:color-mix(in srgb,var(--dim) 48%,transparent);margin:0 -4px;}
+/* el contador «4 de 7»: la cifra en la voz cuantitativa (Fraunces), el resto calla */
+.fd-blockrail .cnt{display:inline-flex;align-items:baseline;column-gap:5px;
+  white-space:nowrap;}
+.fd-blockrail .cnt .n{font-family:var(--head);font-weight:700;font-size:17px;
+  color:var(--accent);font-variant-numeric:lining-nums tabular-nums;}
+.fd-blockrail .cnt .of{font-family:var(--body);font-weight:700;font-size:10.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+/* persist:false — la ÚNICA entrada permitida (primera slide del bloque), UN reloj:
+   el chasis baja → los pasos caen en cascada → el marcador aterriza con overshoot
+   → el contador confirma. En el resto del bloque NO hay entrada: ya estaba ahí. */
+.fd-blockrail.enter{animation:fd-brl-in .4s cubic-bezier(.25,.8,.3,1) both;}
+.fd-blockrail.enter .lab{opacity:0;animation:fd-brl-fade .25s ease .1s forwards;}
+.fd-blockrail.enter .seg,.fd-blockrail.enter .dot,.fd-blockrail.enter .crumb,
+.fd-blockrail.enter .sep{opacity:0;
+  animation:fd-brl-pop .28s cubic-bezier(.3,1.5,.4,1) calc(.16s + var(--i,0)*.05s) forwards;}
+.fd-blockrail.enter .mk{transform:scale(0);
+  animation:fd-brl-mk .32s cubic-bezier(.3,1.6,.4,1) calc(.2s + (var(--a,1) - 1)*.05s) forwards,
+    fd-brl-pulse 2.6s ease-in-out calc(.6s + var(--a,1)*.05s) infinite;}
+.fd-blockrail.enter .cnt{opacity:0;
+  animation:fd-brl-fade .28s ease calc(.3s + var(--n,5)*.05s) forwards;}
+@keyframes fd-brl-in{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:none;}}
+@keyframes fd-brl-pop{from{opacity:0;transform:scale(.5);}to{opacity:1;transform:none;}}
+@keyframes fd-brl-mk{from{transform:scale(0);}to{transform:none;}}
+@keyframes fd-brl-fade{to{opacity:1;}}
+@keyframes fd-brl-pulse{
+  0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 1px 3px rgba(0,0,0,.35),
+    0 0 6px color-mix(in srgb,var(--accent) 32%,transparent);}
+  50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 1px 3px rgba(0,0,0,.35),
+    0 0 15px color-mix(in srgb,var(--accent) 62%,transparent);}}
+@media (prefers-reduced-motion: reduce), print{
+  .fd-blockrail,.fd-blockrail .mk{animation:none;}
+  .fd-blockrail.enter,.fd-blockrail.enter .lab,.fd-blockrail.enter .seg,
+  .fd-blockrail.enter .dot,.fd-blockrail.enter .crumb,.fd-blockrail.enter .sep,
+  .fd-blockrail.enter .cnt,.fd-blockrail.enter .mk{
+    animation:none;opacity:1;transform:none;}
+}
+
+/* ---- foundry: chatthread (core/components/foundry/chatthread.ts) ---- */
+.fd-chatthread{position:absolute;box-sizing:border-box;width:380px;font-family:var(--body);}
+.fd-chatthread *{box-sizing:border-box;}
+/* la pantalla: superficie con masa — sombra doble (ambiente+contacto) + rim */
+.fd-chatthread .scrn{position:relative;overflow:hidden;border-radius:var(--radius);
+  box-shadow:0 24px 52px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.28),0 0 0 1px rgba(0,0,0,.22);}
+/* chasis in_device: los materiales de gd-phone (bezel #0b0b0b, aro #2a2a2a) */
+.fd-chatthread.dev{background:#0b0b0b;border-radius:46px;padding:11px 11px 7px;
+  box-shadow:var(--shadow),inset 0 0 0 2px #2a2a2a,inset 0 1px 0 rgba(255,255,255,.08);}
+.fd-chatthread.dev .scrn{border-radius:34px;box-shadow:0 0 0 1px rgba(0,0,0,.4);}
+/* cámara punch-hole centrada en el status bar (el bezel moderno, no el notch 2017) */
+.fd-chatthread.dev .scrn::before{content:"";position:absolute;top:7px;left:50%;
+  transform:translateX(-50%);width:11px;height:11px;border-radius:50%;background:#0b0b0b;
+  box-shadow:inset 0 0 0 2.5px #1c1e22,inset 0 0 3px 1px rgba(90,130,170,.55);}
+.fd-chatthread .homebar{width:38%;height:4px;margin:7px auto 1px;border-radius:var(--pill);
+  background:rgba(255,255,255,.32);}
+/* status bar (solo in_device) */
+.fd-chatthread .sbar{display:flex;align-items:center;justify-content:space-between;
+  padding:7px 18px 3px;font-size:11px;font-weight:800;letter-spacing:.02em;}
+.fd-chatthread .sbar .ic{display:inline-flex;gap:4px;align-items:center;}
+.fd-chatthread .sbar svg{height:9px;width:auto;fill:currentColor;display:block;}
+.fd-chatthread .sbar .bat{height:10px;}
+/* ---- header ---- */
+.fd-chatthread .hdr{display:flex;align-items:center;gap:9px;padding:9px 12px;}
+.fd-chatthread .back{display:flex;flex:none;}
+.fd-chatthread .back svg{width:9px;height:15px;}
+.fd-chatthread .ava{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;
+  background:#DFE5E7;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.2);}
+.fd-chatthread .ava img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;}
+.fd-chatthread .ava.ini{display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:15px;font-weight:900;}
+.fd-chatthread .who{flex:1;min-width:0;line-height:1.18;}
+.fd-chatthread .nm{font-size:13.5px;font-weight:800;letter-spacing:.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fd-chatthread .st{font-size:10.5px;font-weight:600;opacity:.85;display:flex;align-items:center;gap:4px;}
+.fd-chatthread .st .dot{display:none;width:6px;height:6px;border-radius:50%;background:var(--ok);}
+.fd-chatthread .hact{display:inline-flex;gap:13px;align-items:center;margin-left:auto;flex:none;}
+.fd-chatthread .hact svg{height:14px;width:auto;fill:currentColor;opacity:.92;}
+/* ---- hilo ---- */
+.fd-chatthread .thread{display:flex;flex-direction:column;gap:9px;padding:12px;}
+.fd-chatthread .mrow{position:relative;display:flex;}
+.fd-chatthread .mrow.a{justify-content:flex-start;}
+.fd-chatthread .mrow.b{justify-content:flex-end;}
+.fd-chatthread .mrow.sys{justify-content:center;}
+.fd-chatthread .mrow.hasrx{margin-bottom:12px;}
+.fd-chatthread .mrow.hasdv{margin-bottom:13px;}
+.fd-chatthread .msg{position:relative;max-width:78%;padding:7px 10px 5px;
+  font-size:14px;line-height:1.35;font-weight:600;}
+.fd-chatthread .txt b{font-weight:800;}
+.fd-chatthread .meta{display:flex;justify-content:flex-end;align-items:center;gap:3px;
+  margin-top:2px;font-size:10px;font-weight:600;opacity:.9;}
+.fd-chatthread .tick{width:15px;height:10px;flex:none;}
+.fd-chatthread .tick path{fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;}
+.fd-chatthread .dlv{position:absolute;right:2px;bottom:-15px;font-size:9.5px;
+  font-weight:700;color:#8E8E93;white-space:nowrap;}
+/* el mensaje CAE al llegar su beat (reveal transiciona .fragment) */
+.fd-chatthread .msg.fragment:not(.visible){transform:translateY(9px) scale(.97);}
+/* reactions: píldora que solapa el borde inferior de la burbuja */
+.fd-chatthread .reacts{position:absolute;bottom:-12px;display:flex;gap:4px;}
+.fd-chatthread .a .reacts{left:6px;}
+.fd-chatthread .b .reacts{right:6px;}
+.fd-chatthread .rx{display:inline-flex;align-items:center;gap:4px;font-size:14px;
+  font-weight:700;padding:2px 8px;border-radius:var(--pill);background:#fff;color:#54656F;
+  box-shadow:0 1px 2px rgba(0,0,0,.18),inset 0 0 0 1px rgba(0,0,0,.06);}
+.fd-chatthread .rx b{font-weight:800;font-size:10px;}
+/* typing: flota donde el mensaje va a aterrizar; current-visible en el beat N−1 */
+.fd-chatthread .typing{position:absolute;top:0;display:inline-flex;gap:4px;align-items:center;
+  padding:10px 12px;border-radius:2px 10px 10px 10px;background:#fff;
+  box-shadow:0 1px 1px rgba(0,0,0,.13);}
+.fd-chatthread .a .typing{left:0;}
+.fd-chatthread .b .typing{right:0;border-radius:10px 2px 10px 10px;}
+.fd-chatthread .typing i{width:6px;height:6px;border-radius:50%;background:#93A1AA;
+  animation:fd-ct-dot 1.15s ease-in-out infinite;}
+.fd-chatthread .typing i:nth-child(2){animation-delay:.14s;}
+.fd-chatthread .typing i:nth-child(3){animation-delay:.28s;}
+@keyframes fd-ct-dot{0%,55%,100%{transform:translateY(0);opacity:.4}
+  25%{transform:translateY(-3px);opacity:.95}}
+/* ---- composer + teclado ---- */
+.fd-chatthread .cmp{display:flex;align-items:center;gap:7px;padding:8px 10px;}
+.fd-chatthread .cemo{display:flex;flex:none;opacity:.6;}
+.fd-chatthread .cemo svg{width:17px;height:17px;fill:currentColor;}
+.fd-chatthread .cinp{flex:1;min-width:0;font-size:12.5px;font-weight:600;padding:8px 13px;
+  border-radius:var(--pill);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fd-chatthread .csend{display:flex;align-items:center;justify-content:center;flex:none;
+  width:32px;height:32px;border-radius:50%;
+  box-shadow:0 2px 5px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.35);}
+.fd-chatthread .csend svg{width:14px;height:14px;fill:currentColor;margin-left:2px;}
+/* teclas: CARA con gradiente + PARED (labio 2px, ~73% del valor de la cara) +
+   sombra sobre el chasis — proporciones del patrón gd-keys (medidas, no adivinadas) */
+.fd-chatthread .kb{padding:8px 6px 10px;display:flex;flex-direction:column;gap:5px;
+  background:#D3D7DC;box-shadow:inset 0 1px 0 rgba(255,255,255,.55);}
+.fd-chatthread .krow{display:flex;gap:4px;justify-content:center;}
+.fd-chatthread .ky{--lip:#A9ABAF;flex:1;max-width:34px;height:30px;display:flex;
+  align-items:center;justify-content:center;font-size:11.5px;font-weight:700;
+  border-radius:5px;color:#3C4043;background:linear-gradient(180deg,#FDFDFE 0%,#EBECEE 100%);
+  box-shadow:0 2px 0 var(--lip),0 3px 5px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.9);}
+.fd-chatthread .ky.wide{max-width:48px;flex:1.5;font-size:10px;}
+.fd-chatthread .ky.spc{max-width:none;flex:5;font-size:10px;letter-spacing:.08em;color:#70757A;}
+.fd-chatthread{--kgo:var(--accent);}
+.fd-chatthread .ky.go{--lip:color-mix(in srgb,var(--kgo) 55%,#000);color:#fff;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--kgo) 86%,#fff) 0%,var(--kgo) 100%);}
+/* ============ skin: whatsapp (colores del artefacto) ============ */
+.fd-chatthread.sk-whatsapp{--kgo:#00A884;}
+.fd-chatthread.sk-whatsapp .scrn{background:#ECE5DD;}
+.fd-chatthread.sk-whatsapp .sbar{background:#054C44;color:#fff;}
+.fd-chatthread.sk-whatsapp .hdr{background:#075E54;color:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.22);}
+.fd-chatthread.sk-whatsapp .st{color:rgba(255,255,255,.78);}
+/* el fondo doodle del hilo: textura de puntos sutil, no PNG */
+.fd-chatthread.sk-whatsapp .thread{background-color:#ECE5DD;
+  background-image:radial-gradient(rgba(60,70,75,.07) 1px,transparent 1.4px);
+  background-size:14px 14px;}
+.fd-chatthread.sk-whatsapp .a .msg{background:#fff;color:#111B21;
+  border-radius:2px 10px 10px 10px;box-shadow:0 1px 1px rgba(0,0,0,.13);}
+.fd-chatthread.sk-whatsapp .b .msg{background:#D9FDD3;color:#111B21;
+  border-radius:10px 2px 10px 10px;box-shadow:0 1px 1px rgba(0,0,0,.13);}
+.fd-chatthread.sk-whatsapp .a .msg::before{content:"";position:absolute;top:0;left:-7px;
+  border-top:9px solid #fff;border-left:8px solid transparent;}
+.fd-chatthread.sk-whatsapp .b .msg::before{content:"";position:absolute;top:0;right:-7px;
+  border-top:9px solid #D9FDD3;border-right:8px solid transparent;}
+.fd-chatthread.sk-whatsapp .meta{color:#667781;}
+.fd-chatthread.sk-whatsapp .b .tick{color:#53BDEB;}   /* leído: doble check azul */
+.fd-chatthread.sk-whatsapp .sys .msg{background:#FDF3C6;color:#57534E;font-size:11px;
+  font-weight:700;padding:4px 12px;border-radius:8px;box-shadow:0 1px 1px rgba(0,0,0,.1);}
+.fd-chatthread.sk-whatsapp .cmp{background:#F0F2F5;color:#54656F;}
+.fd-chatthread.sk-whatsapp .cinp{background:#fff;color:#8696A0;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);}
+.fd-chatthread.sk-whatsapp .csend{background:#00A884;color:#fff;}
+/* ============ skin: imessage ============ */
+.fd-chatthread.sk-imessage{--kgo:#0A84FF;}
+.fd-chatthread.sk-imessage .scrn{background:#fff;}
+.fd-chatthread.sk-imessage .sbar{background:#F5F5F7;color:#000;}
+.fd-chatthread.sk-imessage .hdr{background:rgba(246,246,247,.96);color:#000;
+  border-bottom:1px solid #D8D8DC;padding:7px 12px 6px;}
+.fd-chatthread.sk-imessage .back,.fd-chatthread.sk-imessage .hact{color:#0A84FF;}
+.fd-chatthread.sk-imessage .hmid{flex:1;min-width:0;display:flex;flex-direction:column;
+  align-items:center;gap:2px;}
+.fd-chatthread.sk-imessage .hmid .ava{width:36px;height:36px;background:#E4E4E8;}
+.fd-chatthread.sk-imessage .nm{font-size:10.5px;font-weight:600;}
+.fd-chatthread.sk-imessage .chv{color:#B0B0B6;margin-left:2px;}
+.fd-chatthread.sk-imessage .a .msg{background:#E9E9EB;color:#111;
+  border-radius:16px 16px 16px 5px;}
+.fd-chatthread.sk-imessage .b .msg{color:#fff;border-radius:16px 16px 5px 16px;
+  background:linear-gradient(180deg,#3D9BFF 0%,#0A84FF 100%);}
+.fd-chatthread.sk-imessage .a .meta{color:#8E8E93;}
+.fd-chatthread.sk-imessage .b .meta{color:rgba(255,255,255,.75);}
+.fd-chatthread.sk-imessage .sys .msg{background:none;box-shadow:none;color:#8E8E93;
+  font-size:10.5px;font-weight:700;padding:0;}
+.fd-chatthread.sk-imessage .typing{background:#E9E9EB;border-radius:16px 16px 16px 5px;}
+.fd-chatthread.sk-imessage .typing i{background:#8E8E93;}
+.fd-chatthread.sk-imessage .cmp{background:#fff;border-top:1px solid #E8E8EA;color:#8E8E93;}
+.fd-chatthread.sk-imessage .cinp{background:#fff;color:#C0C0C6;
+  box-shadow:inset 0 0 0 1px #C6C6C8;}
+.fd-chatthread.sk-imessage .csend{background:#0A84FF;color:#fff;}
+/* ============ skin: slack (el hilo de equipo; desktop, sin burbujas) ============ */
+.fd-chatthread.sk-slack .scrn{background:#fff;}
+.fd-chatthread.sk-slack .sbar{background:#fff;color:#1D1C1D;}
+.fd-chatthread.sk-slack .hdr{background:#fff;color:#1D1C1D;border-bottom:1px solid #E8E8E8;
+  padding:10px 14px;gap:8px;}
+.fd-chatthread.sk-slack .chn{font-size:14px;font-weight:900;flex:none;}
+.fd-chatthread.sk-slack .star{color:#616061;font-size:12px;flex:none;}
+.fd-chatthread.sk-slack .topic{flex:1;min-width:0;font-size:11px;font-weight:600;color:#616061;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:1px solid #DDD;padding-left:8px;}
+.fd-chatthread.sk-slack .hact{color:#616061;}
+.fd-chatthread.sk-slack .thread{gap:13px;padding:12px 14px;}
+.fd-chatthread.sk-slack .mrow.b{justify-content:flex-start;}
+.fd-chatthread.sk-slack .msg{max-width:100%;display:flex;gap:9px;padding:0;background:none;}
+.fd-chatthread.sk-slack .sava{width:30px;height:30px;border-radius:7px;overflow:hidden;
+  flex:none;background:#DDD;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);}
+.fd-chatthread.sk-slack .sava img{width:100%;height:100%;object-fit:cover;
+  object-position:top;display:block;}
+.fd-chatthread.sk-slack .sava.ini{display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;font-weight:900;}
+.fd-chatthread.sk-slack .scol{flex:1;min-width:0;}
+.fd-chatthread.sk-slack .shead{display:flex;align-items:baseline;gap:7px;}
+.fd-chatthread.sk-slack .snm{font-size:13px;font-weight:900;color:#1D1C1D;}
+.fd-chatthread.sk-slack .stm{font-size:10px;font-weight:600;color:#616061;}
+.fd-chatthread.sk-slack .txt{color:#1D1C1D;font-size:13.5px;line-height:1.42;
+  font-weight:500;margin-top:1px;}
+.fd-chatthread.sk-slack .reacts{position:static;display:flex;gap:5px;margin-top:6px;}
+.fd-chatthread.sk-slack .rx{background:#F4F4F4;color:#1D1C1D;box-shadow:none;
+  border:1px solid #E0E0E0;}
+.fd-chatthread.sk-slack .thr{display:flex;gap:7px;align-items:baseline;margin-top:5px;
+  font-size:11.5px;}
+.fd-chatthread.sk-slack .thr b{color:#1264A3;font-weight:800;}
+.fd-chatthread.sk-slack .thr span{color:#616061;font-weight:600;}
+.fd-chatthread.sk-slack .mrow.sys{align-items:center;gap:8px;}
+.fd-chatthread.sk-slack .mrow.sys::before,.fd-chatthread.sk-slack .mrow.sys::after{
+  content:"";flex:1;height:1px;background:#E8E8E8;}
+.fd-chatthread.sk-slack .sys .msg{display:block;background:#fff;border:1px solid #E0E0E0;
+  color:#616061;font-size:10.5px;font-weight:800;padding:3px 12px;border-radius:var(--pill);}
+.fd-chatthread.sk-slack .typing{position:absolute;left:39px;background:#fff;
+  border:1px solid #E0E0E0;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.08);}
+.fd-chatthread.sk-slack .typing i{background:#B5B5B3;}
+.fd-chatthread.sk-slack .cmp{background:#fff;padding:2px 12px 12px;}
+.fd-chatthread.sk-slack .cbox{flex:1;min-width:0;border:1px solid #C9C9C9;border-radius:9px;
+  overflow:hidden;background:#fff;}
+.fd-chatthread.sk-slack .ctools{display:flex;gap:12px;align-items:center;padding:5px 10px;
+  background:#F8F8F8;color:#616061;font-size:10.5px;font-weight:700;border-bottom:1px solid #EEE;}
+.fd-chatthread.sk-slack .crow{display:flex;align-items:center;gap:8px;padding:4px 6px 4px 0;}
+.fd-chatthread.sk-slack .cinp{border-radius:0;background:none;color:#8D8D8D;
+  box-shadow:none;padding:6px 10px;}
+.fd-chatthread.sk-slack .csend{width:26px;height:26px;border-radius:6px;
+  background:#007A5A;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.fd-chatthread.sk-slack .csend svg{width:12px;height:12px;}
+/* ============ skin: generic — 100% tokens, vive bajo las 6 pieles ============ */
+.fd-chatthread.sk-generic .scrn{background:color-mix(in srgb,var(--bg) 84%,#fff);
+  box-shadow:0 24px 52px rgba(0,0,0,.45),0 4px 12px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.1),0 0 0 1px var(--card-bd);}
+.fd-chatthread.sk-generic .sbar{background:rgba(255,255,255,.06);color:var(--ink);}
+.fd-chatthread.sk-generic .hdr{background:rgba(255,255,255,.06);color:var(--ink);
+  border-bottom:1px solid var(--card-bd);}
+.fd-chatthread.sk-generic .ava{background:rgba(255,255,255,.14);}
+.fd-chatthread.sk-generic .st{color:var(--dim);}
+.fd-chatthread.sk-generic .st .dot{display:inline-block;}
+.fd-chatthread.sk-generic .a .msg{background:rgba(255,255,255,.09);color:var(--light);
+  border-radius:4px 14px 14px 14px;box-shadow:inset 0 0 0 1px var(--card-bd),
+    0 2px 6px rgba(0,0,0,.2);}
+.fd-chatthread.sk-generic .b .msg{color:var(--ink);border-radius:14px 4px 14px 14px;
+  background:color-mix(in srgb,var(--accent) 24%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 45%,transparent),
+    0 2px 6px rgba(0,0,0,.2);}
+.fd-chatthread.sk-generic .meta{color:var(--dim);}
+.fd-chatthread.sk-generic .b .tick{color:var(--accent);}
+.fd-chatthread.sk-generic .sys .msg{background:var(--card-bg);color:var(--dim);
+  font-size:11px;font-weight:700;padding:3px 12px;border-radius:var(--pill);
+  box-shadow:inset 0 0 0 1px var(--card-bd);}
+.fd-chatthread.sk-generic .typing{background:rgba(255,255,255,.09);
+  box-shadow:inset 0 0 0 1px var(--card-bd);border-radius:4px 14px 14px 14px;}
+.fd-chatthread.sk-generic .typing i{background:var(--dim);}
+.fd-chatthread.sk-generic .rx{background:var(--card-bg);color:var(--light);
+  box-shadow:inset 0 0 0 1px var(--card-bd);}
+.fd-chatthread.sk-generic .thr b{color:var(--accent);}
+.fd-chatthread.sk-generic .thr span{color:var(--dim);}
+.fd-chatthread.sk-generic .cmp{background:rgba(255,255,255,.04);color:var(--dim);
+  border-top:1px solid var(--card-bd);}
+.fd-chatthread.sk-generic .cinp{background:var(--card-bg);color:var(--dim);
+  box-shadow:inset 0 0 0 1px var(--card-bd);}
+.fd-chatthread.sk-generic .csend{background:var(--accent);color:var(--accent-ink);}
+.fd-chatthread.sk-generic .kb{background:linear-gradient(180deg,rgba(203,209,213,.5) 0%,
+  rgba(168,175,181,.42) 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),
+  inset 0 -1px 0 rgba(0,0,0,.1);}
+.fd-chatthread.sk-generic .ky.go{color:var(--accent-ink);}
+/* reduced-motion: estado final legible, nada a medias */
+@media (prefers-reduced-motion: reduce){
+  .fd-chatthread .typing i{animation:none;opacity:.55;}
+  .fd-chatthread .msg.fragment:not(.visible){transform:none;}
+}
+
+/* ---- foundry: codediff (core/components/foundry/codediff.ts) ---- */
+.fd-codediff{position:absolute;box-sizing:border-box;--rh:25px;
+  background:#0d1117;border:1px solid rgba(255,255,255,.09);
+  border-radius:min(var(--radius),14px);overflow:hidden;
+  box-shadow:0 18px 42px rgba(0,0,0,.45),0 4px 10px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.07);}
+.fd-codediff .head{display:flex;align-items:center;gap:10px;height:38px;
+  padding:0 14px 0 12px;background:#161b22;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05);}
+.fd-codediff .sig{display:grid;place-items:center;width:20px;height:20px;flex:none;
+  border-radius:6px;font-family:"SF Mono",ui-monospace,Menlo,monospace;
+  font-size:13px;font-weight:700;line-height:1;color:rgba(230,237,243,.92);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--ok) 34%,transparent),
+    color-mix(in srgb,var(--bad) 34%,transparent));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(0,0,0,.32);}
+.fd-codediff .fn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-family:"SF Mono",ui-monospace,Menlo,monospace;
+  font-size:13px;font-weight:600;letter-spacing:.01em;color:rgba(230,237,243,.88);}
+.fd-codediff .stats{display:flex;gap:8px;flex:none;
+  font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;}
+.fd-codediff .stats .add{color:var(--ok);}
+.fd-codediff .stats .del{color:var(--bad);}
+.fd-codediff .body{padding:7px 0 7px;}
+.fd-codediff .ln{display:grid;grid-template-columns:37px 37px 22px 1fr;
+  align-items:center;height:var(--rh);overflow:hidden;}
+.fd-codediff .no{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;
+  font-weight:500;line-height:1;color:rgba(230,237,243,.32);text-align:right;
+  padding-right:9px;}
+.fd-codediff .no.new{border-right:1px solid rgba(255,255,255,.07);}
+.fd-codediff .op{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;
+  font-weight:700;line-height:1;text-align:center;}
+.fd-codediff .tx{display:block;position:relative;min-width:0;overflow:hidden;
+  white-space:pre;padding-right:14px;}
+.fd-codediff .t{display:inline-block;position:relative;
+  font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:14px;font-weight:500;
+  line-height:var(--rh);color:rgba(230,237,243,.72);}
+.fd-codediff .t b{color:#e6edf3;font-weight:700;}
+.fd-codediff .ln.del{background:color-mix(in srgb,var(--bad) 9%,transparent);}
+.fd-codediff .ln.del .op{color:var(--bad);}
+.fd-codediff .ln.del .t{color:rgba(230,237,243,.48);}
+.fd-codediff .ln.del .t::after{content:"";position:absolute;left:-2px;right:-4px;
+  top:52%;height:1.6px;border-radius:1px;
+  background:color-mix(in srgb,var(--bad) 78%,transparent);
+  transform:scaleX(1);transform-origin:0 50%;}
+.fd-codediff .ln.add{background:color-mix(in srgb,var(--ok) 10%,transparent);}
+.fd-codediff .ln.add .op{color:var(--ok);}
+.fd-codediff .ln.add .t{color:rgba(230,237,243,.92);}
+.fd-codediff .ln.hl{box-shadow:inset 3px 0 0 var(--accent);}
+.fd-codediff .ln.gap{background:rgba(255,255,255,.025);}
+.fd-codediff .ln.gap .t{color:rgba(230,237,243,.35);font-style:italic;font-size:12.5px;}
+@keyframes fd-cd-strike{from{transform:scaleX(0);}}
+@keyframes fd-cd-dim{from{color:rgba(230,237,243,.82);}}
+@keyframes fd-cd-mark{from{background:transparent;}}
+@keyframes fd-cd-grow{from{height:0;opacity:0;}}
+@keyframes fd-cd-pop{from{transform:scale(.5);opacity:0;}}
+@keyframes fd-cd-pulse{
+  from{box-shadow:inset 3px 0 0 var(--accent),
+    0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent);}
+  to{box-shadow:inset 3px 0 0 var(--accent),0 0 0 14px transparent;}}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.del,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.del{
+  animation:fd-cd-mark .3s ease-out .3s backwards;}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.del .t,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.del .t{
+  animation:fd-cd-dim .3s ease-out .3s backwards;}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.del .t::after,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.del .t::after{
+  animation:fd-cd-strike .26s ease-in .3s backwards;}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.add,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.add{
+  animation:fd-cd-grow .32s cubic-bezier(.25,.6,.3,1) backwards;
+  animation-delay:calc(.6s + var(--i,0)*.08s);}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.hl,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.hl{
+  animation:fd-cd-pulse .6s ease-out backwards;
+  animation-delay:calc(.6s + var(--last,0)*.08s + .6s);}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.add.hl,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.add.hl{
+  animation:fd-cd-grow .32s cubic-bezier(.25,.6,.3,1) backwards,
+    fd-cd-pulse .6s ease-out backwards;
+  animation-delay:calc(.6s + var(--i,0)*.08s),
+    calc(.6s + var(--last,0)*.08s + .6s);}
+.reveal section.present .fd-codediff:not(.fragment):not(.r-static) .stats,
+.reveal section.present .fd-codediff.fragment.visible:not(.r-static) .stats{
+  animation:fd-cd-pop .28s cubic-bezier(.3,1.4,.5,1) backwards;
+  animation-delay:calc(.6s + var(--last,0)*.08s + .4s);}
+@media (prefers-reduced-motion: reduce), print{
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.del,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.del,
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.del .t,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.del .t,
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.del .t::after,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.del .t::after,
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.add,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.add,
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.hl,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.hl,
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .ln.add.hl,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .ln.add.hl,
+  .reveal section.present .fd-codediff:not(.fragment):not(.r-static) .stats,
+  .reveal section.present .fd-codediff.fragment.visible:not(.r-static) .stats{
+    animation:none;}
+}
+
+/* ---- foundry: cyclediagram (core/components/foundry/cyclediagram.ts) ---- */
+.fd-cyclediagram{position:absolute;box-sizing:border-box;}
+.fd-cyclediagram .ring{position:absolute;left:0;top:0;display:block;overflow:visible;}
+/* arcos: tinta suave derivada del skin; la flecha de VUELTA (.close) es el accent */
+.fd-cyclediagram .seg{color:color-mix(in srgb,var(--light) 46%,transparent);}
+.fd-cyclediagram .seg path{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;}
+.fd-cyclediagram .seg polygon{fill:currentColor;}
+.fd-cyclediagram .seg.close{color:var(--accent);
+  filter:drop-shadow(0 0 7px color-mix(in srgb,var(--accent) 45%,transparent));}
+.fd-cyclediagram .seg.close path{stroke-width:3.5;}
+/* nodo: ancla 0×0 en el círculo; coin y caption se cuelgan de ella */
+.fd-cyclediagram .node{position:absolute;width:0;height:0;}
+.fd-cyclediagram .coin{position:absolute;left:-40px;top:-40px;width:80px;height:80px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 120% at 30% 22%,rgba(255,255,255,.17),rgba(255,255,255,0) 52%),
+    linear-gradient(180deg,color-mix(in srgb,#fff 9%,var(--bg)),color-mix(in srgb,#000 12%,var(--bg)));
+  border:1px solid var(--card-bd);
+  box-shadow:0 4px 0 color-mix(in srgb,#000 42%,var(--bg)),
+    0 8px 16px rgba(0,0,0,.30),0 20px 38px rgba(0,0,0,.34),
+    inset 0 2px 0 rgba(255,255,255,.16),inset 0 -4px 8px rgba(0,0,0,.26);}
+.fd-cyclediagram .coin .face{font-size:34px;line-height:1;transform:translateY(-1px);}
+.fd-cyclediagram .coin .face.num{font-family:var(--head);font-weight:600;font-size:30px;
+  color:var(--light);font-variant-numeric:lining-nums;transform:none;}
+.fd-cyclediagram .coin .ord{position:absolute;right:-4px;bottom:-2px;width:26px;height:26px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--body);font-weight:800;font-size:14px;color:var(--dim);
+  background:color-mix(in srgb,#000 18%,var(--bg));border:1px solid var(--card-bd);
+  box-shadow:0 3px 6px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);}
+/* nodo acento: el aro del argumento (color + aro + glow, nunca solo color) */
+.fd-cyclediagram .node.acc .coin{border-color:color-mix(in srgb,var(--accent) 65%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 80%,transparent),
+    0 4px 0 color-mix(in srgb,#000 42%,var(--bg)),
+    0 8px 16px rgba(0,0,0,.30),0 20px 38px rgba(0,0,0,.34),
+    0 0 26px color-mix(in srgb,var(--accent) 30%,transparent),
+    inset 0 2px 0 rgba(255,255,255,.16),inset 0 -4px 8px rgba(0,0,0,.26);}
+.fd-cyclediagram .node.acc .ord{background:var(--accent);color:var(--accent-ink);
+  border-color:transparent;}
+.fd-cyclediagram .node.acc .cap .lbl{color:var(--accent);}
+/* captions radiales: label la voz UI, note la secundaria */
+.fd-cyclediagram .cap{position:absolute;width:max-content;max-width:172px;}
+.fd-cyclediagram .cap .lbl{font-family:var(--body);font-weight:800;font-size:16px;
+  line-height:1.15;letter-spacing:.02em;color:var(--light);}
+.fd-cyclediagram .cap .note{font-family:var(--body);font-weight:600;font-size:14px;
+  line-height:1.25;color:var(--dim);margin-top:3px;}
+.fd-cyclediagram .cap--r{left:54px;top:0;transform:translateY(-50%);text-align:left;}
+.fd-cyclediagram .cap--l{right:54px;top:0;transform:translateY(-50%);text-align:right;}
+.fd-cyclediagram .cap--t{bottom:54px;left:0;transform:translateX(-50%);text-align:center;}
+.fd-cyclediagram .cap--b{top:54px;left:0;transform:translateX(-50%);text-align:center;}
+/* hub central: disco con masa (bisel + doble sombra), el porqué del ciclo */
+.fd-cyclediagram .hub{position:absolute;border-radius:50%;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;
+  background:radial-gradient(115% 115% at 32% 24%,rgba(255,255,255,.13),rgba(255,255,255,0) 55%),
+    linear-gradient(180deg,color-mix(in srgb,#fff 6%,var(--bg)),color-mix(in srgb,#000 14%,var(--bg)));
+  border:1px solid var(--card-bd);
+  box-shadow:0 14px 30px rgba(0,0,0,.4),0 3px 8px rgba(0,0,0,.24),
+    inset 0 2px 0 rgba(255,255,255,.13),inset 0 -6px 14px rgba(0,0,0,.3);}
+.fd-cyclediagram .hub .hlbl{font-family:var(--body);font-weight:800;font-size:14px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--light);line-height:1.3;}
+/* error de spec VISIBLE en la slide (precedente venn): nunca una caja vacía callada */
+.fd-cyclediagram .err{font-family:var(--body);font-weight:700;font-size:16px;color:var(--bad);
+  background:var(--card-bg);border:1px dashed var(--bad);border-radius:var(--radius);
+  padding:14px 18px;}
+/* flywheel: llanta exterior + brillo cónico en el eje + flechas del accent más gruesas */
+.fd-cyclediagram--fly .hub{
+  background:conic-gradient(from 210deg,rgba(255,255,255,.10),rgba(255,255,255,0) 28%,
+    rgba(255,255,255,.05) 52%,rgba(255,255,255,0) 78%,rgba(255,255,255,.10)),
+    linear-gradient(180deg,color-mix(in srgb,#fff 7%,var(--bg)),color-mix(in srgb,#000 16%,var(--bg)));}
+.fd-cyclediagram--fly .hub::after{content:"";position:absolute;inset:-9px;border-radius:50%;
+  border:2px solid color-mix(in srgb,var(--accent) 38%,transparent);}
+.fd-cyclediagram--fly .seg{color:color-mix(in srgb,var(--accent) 80%,transparent);}
+.fd-cyclediagram--fly .seg path{stroke-width:4;}
+/* la flecha de VUELTA manda TAMBIÉN en flywheel: 4.5 > 4 — la jerarquía del argumento
+   nunca se invierte (misma especificidad 0,3,1 que la regla base .close; ésta va después) */
+.fd-cyclediagram--fly .seg.close path{stroke-width:4.5;}
+/* spin: el momentum fluye por las flechas en el sentido del giro — UN reloj para todas.
+   on_reveal DE VERDAD (patrón venn): el flujo nace pausado dentro de su .fragment y
+   arranca con el .visible de reveal.js — cada flecha empieza a fluir AL llegar su beat */
+.fd-cyclediagram--spin .seg path{stroke-dasharray:1 13;animation:fd-cyc-flow 1.4s linear infinite;}
+.fd-cyclediagram--spin .seg.fragment path{animation-play-state:paused;}
+.fd-cyclediagram--spin .seg.fragment.visible path{animation-play-state:running;}
+@keyframes fd-cyc-flow{to{stroke-dashoffset:-14;}}
+@media (prefers-reduced-motion: reduce){
+  .fd-cyclediagram--spin .seg path{animation:none;stroke-dasharray:none;}
+}
+
+/* ---- foundry: dialknob (core/components/foundry/dialknob.ts) ---- */
+.fd-dialknob{position:absolute;box-sizing:border-box;}
+/* steppers: beats invisibles que llevan el estado k (los ~ hermanos los leen) */
+.fd-dialknob .st{position:absolute;width:0;height:0;}
+/* placa: masa de la casa — bisel inset + sombra doble contacto+ambiente */
+.fd-dialknob .plate{position:absolute;inset:0;border-radius:var(--radius-lg);
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015) 55%),var(--card-bg);
+  border:1px solid var(--card-bd);
+  box-shadow:0 20px 44px rgba(0,0,0,.38),0 4px 10px rgba(0,0,0,.26),
+    inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.22);}
+/* tornillos de panel: cabeza fresada con ranura, cada uno a su ángulo */
+.fd-dialknob .scr{position:absolute;width:7px;height:7px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.13),rgba(0,0,0,.34) 72%);
+  box-shadow:inset 0 1px 1.5px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.06);}
+.fd-dialknob .scr::after{content:"";position:absolute;left:1px;right:1px;top:50%;
+  height:1.2px;margin-top:-.6px;background:rgba(0,0,0,.5);border-radius:1px;}
+.fd-dialknob .scr.tl{left:9px;top:9px;transform:rotate(23deg);}
+.fd-dialknob .scr.tr{right:9px;top:9px;transform:rotate(68deg);}
+.fd-dialknob .scr.bl{left:9px;bottom:9px;transform:rotate(-40deg);}
+.fd-dialknob .scr.br{right:9px;bottom:9px;transform:rotate(12deg);}
+.fd-dialknob .lbl{position:absolute;font-family:var(--body);font-weight:800;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);}
+.fd-dialknob.no-ro .lbl{text-align:center;}
+.fd-dialknob svg{position:absolute;left:0;top:0;display:block;overflow:visible;}
+/* surco rebajado del arco + arco activo (el recorrido ganado, en acento) */
+.fd-dialknob .trk,.fd-dialknob .trk-lip{fill:none;stroke-width:5;stroke-linecap:round;}
+.fd-dialknob .trk{stroke:rgba(0,0,0,.32);}
+.fd-dialknob .trk-lip{stroke:rgba(255,255,255,.07);}
+.fd-dialknob .arc{fill:none;stroke:var(--accent);stroke-width:3.5;stroke-linecap:round;
+  stroke-dasharray:1;stroke-dashoffset:calc(1 - var(--t0));
+  filter:drop-shadow(0 0 5px color-mix(in srgb,var(--accent) 45%,transparent));
+  transition:stroke-dashoffset .55s cubic-bezier(.34,.75,.26,1.14);}
+.fd-dialknob .tk{stroke:var(--line);stroke-width:1;opacity:.5;}
+.fd-dialknob .tk.mj{stroke:var(--dim);stroke-width:1.6;opacity:.9;}
+.fd-dialknob .num{font-family:var(--body);font-weight:700;fill:var(--dim);
+  font-variant-numeric:lining-nums;letter-spacing:.02em;}
+/* pozo rebajado: el mando vive HUNDIDO en la placa */
+.fd-dialknob .well{position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 50% 42%,rgba(0,0,0,.32),rgba(0,0,0,.14) 66%,rgba(0,0,0,.04));
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.5),inset 0 -1px 0 rgba(255,255,255,.06);}
+/* el mando: sombra proyectada FIJA (la luz no gira) sobre contenedor quieto */
+.fd-dialknob .knob{position:absolute;border-radius:50%;
+  box-shadow:0 13px 26px rgba(0,0,0,.48),0 4px 9px rgba(0,0,0,.32);}
+.fd-dialknob .rgroup{transition:transform .55s cubic-bezier(.34,.75,.26,1.14);
+  transform:rotate(var(--r0));}
+/* falda moleteada: los dientes ROTAN con el giro (repeating-conic) */
+.fd-dialknob .skirt{position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(0,0,0,.5);
+  background:repeating-conic-gradient(rgba(255,255,255,.12) 0deg 2.4deg,
+      rgba(0,0,0,.28) 2.4deg 5.6deg,rgba(255,255,255,.02) 5.6deg 7.2deg),
+    color-mix(in srgb,var(--bg) 82%,white);}
+/* la luz de la escena, fija: brillo arriba-izquierda, penumbra abajo-derecha */
+.fd-dialknob .sheen{position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(158deg,rgba(255,255,255,.18),rgba(255,255,255,0) 40%,rgba(0,0,0,.26) 90%);}
+/* tapa abombada fija con bisel; el puntero rota encima */
+.fd-dialknob .cap{position:absolute;border-radius:50%;border:1px solid rgba(0,0,0,.5);
+  background:radial-gradient(circle at 33% 27%,color-mix(in srgb,var(--bg) 62%,white),
+    color-mix(in srgb,var(--bg) 86%,white) 48%,color-mix(in srgb,var(--bg) 68%,black) 100%);
+  box-shadow:inset 0 1.5px 1px rgba(255,255,255,.22),inset 0 -2px 4px rgba(0,0,0,.42),
+    0 1px 2px rgba(0,0,0,.4);}
+.fd-dialknob .ptrbox{position:absolute;inset:0;}
+.fd-dialknob .ptr{position:absolute;left:calc(50% - 2.5px);width:5px;border-radius:3px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 86%,white),var(--accent));
+  box-shadow:0 0 8px color-mix(in srgb,var(--accent) 55%,transparent),
+    0 1px 1px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.4);}
+.fd-dialknob .hubdot{position:absolute;left:50%;top:50%;width:9px;height:9px;
+  margin:-4.5px 0 0 -4.5px;border-radius:50%;background:rgba(0,0,0,.38);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.08);}
+/* el ajuste: la cifra de la palanca, re-estampada por giro */
+.fd-dialknob .dv{position:absolute;font-family:var(--head);font-weight:var(--head-weight);
+  font-variant-numeric:lining-nums;line-height:1;color:var(--accent);
+  text-shadow:0 0 12px color-mix(in srgb,var(--accent) 30%,transparent);}
+.fd-dialknob .dv .v{position:absolute;inset:0;text-align:center;opacity:0;
+  transform:translateY(5px) scale(.94);
+  transition:opacity .22s ease,transform .22s cubic-bezier(.2,.7,.25,1.3);}
+.fd-dialknob .dv .v-0{opacity:1;transform:none;}
+/* cable rebajado: por aquí viaja el pulso del giro hasta el readout */
+.fd-dialknob .wire{position:absolute;height:4px;border-radius:var(--pill);
+  background:rgba(0,0,0,.4);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.06);}
+.fd-dialknob .wire::before{content:"";position:absolute;left:-2px;top:50%;
+  width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--dim);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.5),0 1px 0 rgba(255,255,255,.07);}
+.fd-dialknob .wire .chev{position:absolute;right:0;top:-2px;width:7px;height:7px;
+  border-top:2px solid var(--dim);border-right:2px solid var(--dim);
+  border-radius:1px;transform:rotate(45deg);}
+.fd-dialknob .wire .pulse{position:absolute;left:2px;top:50%;width:8px;height:8px;
+  margin-top:-4px;border-radius:50%;background:var(--accent);opacity:0;
+  box-shadow:0 0 8px color-mix(in srgb,var(--accent) 70%,transparent);}
+/* ventana del readout: cristal rebajado donde aterriza el efecto; tras el
+   primer giro la ventana queda "viva" (arista de acento persistente) */
+.fd-dialknob .ro{position:absolute;border-radius:var(--radius);
+  background:linear-gradient(180deg,rgba(0,0,0,.40),rgba(0,0,0,.26));
+  border:1px solid rgba(0,0,0,.55);transition:border-color .3s ease .5s;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.5),inset 0 -1px 0 rgba(255,255,255,.05),
+    0 1px 0 rgba(255,255,255,.07);}
+.fd-dialknob .ro .glow{position:absolute;inset:-1px;border-radius:var(--radius);
+  opacity:0;pointer-events:none;
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 60%,transparent),
+    0 0 20px color-mix(in srgb,var(--accent) 28%,transparent),
+    inset 0 0 14px color-mix(in srgb,var(--accent) 18%,transparent);}
+.fd-dialknob .ro .rol{position:absolute;left:16px;right:16px;top:12px;
+  font-family:var(--body);font-weight:800;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--dim);}
+.fd-dialknob .ro .rov{position:absolute;left:16px;right:16px;bottom:12px;
+  font-family:var(--head);font-weight:var(--head-weight);
+  font-variant-numeric:lining-nums;line-height:1;color:var(--light);}
+.fd-dialknob .rv{position:absolute;left:0;right:0;bottom:0;opacity:0;
+  transform:translateY(6px) scale(.95);
+  transition:opacity .28s ease,transform .28s cubic-bezier(.2,.7,.25,1.3);}
+.fd-dialknob .rv-0{opacity:1;transform:none;}
+/* coreografía por giro (UN reloj): mando rota → ajuste re-estampa → el pulso
+   recorre el cable → la ventana parpadea y recalcula */
+.fd-dialknob .st-0.visible~.knob .rgroup{transform:rotate(var(--r1));}
+.fd-dialknob .st-0.visible~svg .arc{stroke-dashoffset:calc(1 - var(--t1));}
+.fd-dialknob .st-0.visible~.dv .v{opacity:0;transform:translateY(5px) scale(.94);transition-delay:0s;}
+.fd-dialknob .st-0.visible~.dv .v-1{opacity:1;transform:none;transition-delay:.15s;}
+.fd-dialknob .st-0.visible~.ro .rv{opacity:0;transform:translateY(6px) scale(.95);transition-delay:0s;}
+.fd-dialknob .st-0.visible~.ro .rv-1{opacity:1;transform:none;transition-delay:.5s;}
+.fd-dialknob .st-0.visible~.wire .pulse{animation:fd-dial-pulse-a .45s ease-in .1s;}
+.fd-dialknob .st-0.visible~.ro .glow{animation:fd-dial-glow-a .7s ease-out .5s;}
+.fd-dialknob .st-0.visible~.ro{border-color:color-mix(in srgb,var(--accent) 38%,rgba(0,0,0,.55));}
+.fd-dialknob .st-1.visible~.knob .rgroup{transform:rotate(var(--r2));}
+.fd-dialknob .st-1.visible~svg .arc{stroke-dashoffset:calc(1 - var(--t2));}
+.fd-dialknob .st-1.visible~.dv .v{opacity:0;transform:translateY(5px) scale(.94);transition-delay:0s;}
+.fd-dialknob .st-1.visible~.dv .v-2{opacity:1;transform:none;transition-delay:.15s;}
+.fd-dialknob .st-1.visible~.ro .rv{opacity:0;transform:translateY(6px) scale(.95);transition-delay:0s;}
+.fd-dialknob .st-1.visible~.ro .rv-2{opacity:1;transform:none;transition-delay:.5s;}
+.fd-dialknob .st-1.visible~.wire .pulse{animation:fd-dial-pulse-b .45s ease-in .1s;}
+.fd-dialknob .st-1.visible~.ro .glow{animation:fd-dial-glow-b .7s ease-out .5s;}
+.fd-dialknob .st-1.visible~.ro{border-color:color-mix(in srgb,var(--accent) 38%,rgba(0,0,0,.55));}
+.fd-dialknob .st-2.visible~.knob .rgroup{transform:rotate(var(--r3));}
+.fd-dialknob .st-2.visible~svg .arc{stroke-dashoffset:calc(1 - var(--t3));}
+.fd-dialknob .st-2.visible~.dv .v{opacity:0;transform:translateY(5px) scale(.94);transition-delay:0s;}
+.fd-dialknob .st-2.visible~.dv .v-3{opacity:1;transform:none;transition-delay:.15s;}
+.fd-dialknob .st-2.visible~.ro .rv{opacity:0;transform:translateY(6px) scale(.95);transition-delay:0s;}
+.fd-dialknob .st-2.visible~.ro .rv-3{opacity:1;transform:none;transition-delay:.5s;}
+.fd-dialknob .st-2.visible~.wire .pulse{animation:fd-dial-pulse-a .45s ease-in .1s;}
+.fd-dialknob .st-2.visible~.ro .glow{animation:fd-dial-glow-a .7s ease-out .5s;}
+.fd-dialknob .st-2.visible~.ro{border-color:color-mix(in srgb,var(--accent) 38%,rgba(0,0,0,.55));}
+.fd-dialknob .st-3.visible~.knob .rgroup{transform:rotate(var(--r4));}
+.fd-dialknob .st-3.visible~svg .arc{stroke-dashoffset:calc(1 - var(--t4));}
+.fd-dialknob .st-3.visible~.dv .v{opacity:0;transform:translateY(5px) scale(.94);transition-delay:0s;}
+.fd-dialknob .st-3.visible~.dv .v-4{opacity:1;transform:none;transition-delay:.15s;}
+.fd-dialknob .st-3.visible~.ro .rv{opacity:0;transform:translateY(6px) scale(.95);transition-delay:0s;}
+.fd-dialknob .st-3.visible~.ro .rv-4{opacity:1;transform:none;transition-delay:.5s;}
+.fd-dialknob .st-3.visible~.wire .pulse{animation:fd-dial-pulse-b .45s ease-in .1s;}
+.fd-dialknob .st-3.visible~.ro .glow{animation:fd-dial-glow-b .7s ease-out .5s;}
+.fd-dialknob .st-3.visible~.ro{border-color:color-mix(in srgb,var(--accent) 38%,rgba(0,0,0,.55));}
+.fd-dialknob .st-4.visible~.knob .rgroup{transform:rotate(var(--r5));}
+.fd-dialknob .st-4.visible~svg .arc{stroke-dashoffset:calc(1 - var(--t5));}
+.fd-dialknob .st-4.visible~.dv .v{opacity:0;transform:translateY(5px) scale(.94);transition-delay:0s;}
+.fd-dialknob .st-4.visible~.dv .v-5{opacity:1;transform:none;transition-delay:.15s;}
+.fd-dialknob .st-4.visible~.ro .rv{opacity:0;transform:translateY(6px) scale(.95);transition-delay:0s;}
+.fd-dialknob .st-4.visible~.ro .rv-5{opacity:1;transform:none;transition-delay:.5s;}
+.fd-dialknob .st-4.visible~.wire .pulse{animation:fd-dial-pulse-a .45s ease-in .1s;}
+.fd-dialknob .st-4.visible~.ro .glow{animation:fd-dial-glow-a .7s ease-out .5s;}
+.fd-dialknob .st-4.visible~.ro{border-color:color-mix(in srgb,var(--accent) 38%,rgba(0,0,0,.55));}
+.fd-dialknob .st-5.visible~.knob .rgroup{transform:rotate(var(--r6));}
+.fd-dialknob .st-5.visible~svg .arc{stroke-dashoffset:calc(1 - var(--t6));}
+.fd-dialknob .st-5.visible~.dv .v{opacity:0;transform:translateY(5px) scale(.94);transition-delay:0s;}
+.fd-dialknob .st-5.visible~.dv .v-6{opacity:1;transform:none;transition-delay:.15s;}
+.fd-dialknob .st-5.visible~.ro .rv{opacity:0;transform:translateY(6px) scale(.95);transition-delay:0s;}
+.fd-dialknob .st-5.visible~.ro .rv-6{opacity:1;transform:none;transition-delay:.5s;}
+.fd-dialknob .st-5.visible~.wire .pulse{animation:fd-dial-pulse-b .45s ease-in .1s;}
+.fd-dialknob .st-5.visible~.ro .glow{animation:fd-dial-glow-b .7s ease-out .5s;}
+.fd-dialknob .st-5.visible~.ro{border-color:color-mix(in srgb,var(--accent) 38%,rgba(0,0,0,.55));}
+@keyframes fd-dial-pulse-a{from{transform:translateX(0);opacity:1;}
+  to{transform:translateX(var(--pw,60px));opacity:1;}}
+@keyframes fd-dial-pulse-b{from{transform:translateX(0);opacity:1;}
+  to{transform:translateX(var(--pw,60px));opacity:1;}}
+@keyframes fd-dial-glow-a{0%{opacity:0;}30%{opacity:1;}100%{opacity:0;}}
+@keyframes fd-dial-glow-b{0%{opacity:0;}30%{opacity:1;}100%{opacity:0;}}
+@media (prefers-reduced-motion: reduce), print{
+  .fd-dialknob .rgroup,.fd-dialknob .arc,.fd-dialknob .dv .v,.fd-dialknob .rv,
+  .fd-dialknob .st.visible~.knob .rgroup,.fd-dialknob .st.visible~svg .arc,
+  .fd-dialknob .st.visible~.dv .v,.fd-dialknob .st.visible~.ro .rv{transition:none;}
+  .fd-dialknob .pulse,.fd-dialknob .st.visible~.wire .pulse,
+  .fd-dialknob .glow,.fd-dialknob .st.visible~.ro .glow{animation:none;opacity:0;}
+}
+
+/* ---- foundry: dominofall (core/components/foundry/dominofall.ts) ---- */
+.fd-dominofall{position:absolute;box-sizing:border-box;}
+/* el suelo: hairline + degradado de piso que recibe las sombras */
+.fd-dominofall .ground{position:absolute;left:-6px;right:-6px;height:1px;
+  background:color-mix(in srgb,var(--line) 70%,transparent);}
+.fd-dominofall .ground::after{content:"";position:absolute;left:0;right:0;top:1px;
+  height:22px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--ink) 10%,transparent),transparent);}
+.fd-dominofall .tile{position:absolute;}
+/* la ficha: cara con gradiente de luz, bisel, sombra doble; pivota en su esquina
+   inferior derecha (cae hacia la siguiente) */
+.fd-dominofall .tile .body{position:absolute;inset:0;border-radius:6px;
+  box-sizing:border-box;border:1px solid var(--card-bd);
+  background:linear-gradient(168deg,
+    color-mix(in srgb,var(--light) 68%,var(--card-bg)),
+    color-mix(in srgb,var(--light) 42%,var(--card-bg)) 55%,
+    color-mix(in srgb,var(--light) 26%,var(--card-bg)));
+  box-shadow:0 10px 22px rgba(0,0,0,.36),0 2px 5px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.28);
+  transform-origin:100% 100%;}
+/* la ranura central de dominó — junta hundida con luz debajo */
+.fd-dominofall .tile .body::after{content:"";position:absolute;left:3px;right:3px;
+  top:52%;height:2px;border-radius:1px;
+  background:color-mix(in srgb,var(--bg) 55%,#000);
+  box-shadow:0 1px 0 rgba(255,255,255,.28);}
+/* pips troquelados (i+1 puntos, cap 6): el orden causal como identidad de dominó */
+.fd-dominofall .tile .pips{position:absolute;left:0;right:0;top:9px;display:flex;
+  flex-direction:column;align-items:center;gap:5px;}
+.fd-dominofall .tile .pips i{width:5px;height:5px;border-radius:50%;
+  background:color-mix(in srgb,var(--bg) 78%,#000);
+  box-shadow:inset 0 1px 1px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.22);}
+/* sombra de contacto en el suelo: se ALARGA cuando la ficha cae (--csx medido) */
+.fd-dominofall .tile .cs{position:absolute;left:-4px;bottom:-3px;
+  width:calc(100% + 8px);height:6px;border-radius:50%;opacity:.4;
+  background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,.5),rgba(0,0,0,0) 70%);
+  transform-origin:0 50%;}
+/* el label: bajo el suelo, inclinado 12° (no colisiona con el vecino) */
+.fd-dominofall .tile .lbl{position:absolute;left:-2px;white-space:nowrap;
+  font-family:var(--body);font-weight:700;font-size:11.5px;color:var(--dim);
+  transform:rotate(12deg);transform-origin:0 0;}
+/* el payoff: monolito accent (gradiente con luz + glow + bisel) que vuelca 90°
+   sobre su esquina inferior derecha y queda de pedestal bajo la cifra */
+.fd-dominofall .payoff{position:absolute;}
+.fd-dominofall .payoff .slab{position:absolute;left:0;bottom:0;border-radius:10px;
+  box-sizing:border-box;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),
+    var(--accent) 46%,color-mix(in srgb,var(--accent) 80%,#000));
+  box-shadow:0 16px 36px rgba(0,0,0,.4),0 3px 8px rgba(0,0,0,.24),
+    0 0 22px color-mix(in srgb,var(--accent) 26%,transparent),
+    inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.3);
+  transform-origin:100% 100%;}
+.fd-dominofall .payoff .slab::after{content:"";position:absolute;left:4px;right:4px;
+  top:52%;height:2px;border-radius:1px;background:rgba(0,0,0,.22);
+  box-shadow:0 1px 0 rgba(255,255,255,.22);}
+/* onda de choque en el suelo al aterrizar el monolito */
+.fd-dominofall .payoff .imp{position:absolute;bottom:-5px;height:16px;opacity:0;
+  border:2px solid color-mix(in srgb,var(--accent) 70%,transparent);
+  border-radius:50%;transform:translateX(-50%);}
+/* la cifra héroe: Fraunces sobre el monolito tumbado, con su caption */
+.fd-dominofall .payoff .res{position:absolute;top:0;display:flex;
+  flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:10px;box-sizing:border-box;}
+.fd-dominofall .payoff .val{font-family:var(--head);font-weight:600;line-height:1;
+  color:var(--accent);font-variant-numeric:lining-nums;white-space:nowrap;opacity:0;
+  text-shadow:0 2px 14px color-mix(in srgb,var(--accent) 32%,transparent);}
+.fd-dominofall .payoff .cap{margin-top:8px;font-family:var(--body);font-weight:800;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--light);
+  white-space:nowrap;opacity:0;}
+.fd-dominofall .empty{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;border:1px dashed var(--card-bd);border-radius:var(--radius);
+  font-family:var(--body);font-weight:700;font-size:16px;color:var(--dim);}
+.fd-dominofall .empty b{color:var(--accent);margin:0 .35em;}
+/* ---- la física, UN reloj ----
+   fd-df-fall no define 0%: arranca del transform BASE — 0° la primera ficha, o los
+   2.1° de reposo del nudge (regla .visible + .visible de sp-beat, más abajo) */
+@keyframes fd-df-fall{
+  62%{transform:rotate(calc(var(--fa) + 4deg));
+      animation-timing-function:cubic-bezier(.2,.75,.4,1);}
+  80%{transform:rotate(calc(var(--fa) - 2.5deg));}
+  100%{transform:rotate(var(--fa));}}
+@keyframes fd-df-spread{100%{transform:scaleX(var(--csx));opacity:.2;}}
+@keyframes fd-df-topple{
+  70%{transform:rotate(90deg);animation-timing-function:cubic-bezier(.2,.8,.4,1);}
+  85%{transform:rotate(84.5deg);}
+  100%{transform:rotate(90deg);}}
+@keyframes fd-df-stamp{
+  0%{opacity:0;transform:scale(1.6) translateY(-16px);}
+  55%{opacity:1;transform:scale(.96) translateY(1px);}
+  76%{transform:scale(1.04);}
+  100%{opacity:1;transform:none;}}
+@keyframes fd-df-shock{
+  0%{opacity:.6;transform:translateX(-50%) scale(.2,.45);}
+  100%{opacity:0;transform:translateX(-50%) scale(1,1);}}
+@keyframes fd-df-fadeup{0%{opacity:0;transform:translateY(7px);}
+  100%{opacity:1;transform:none;}}
+@keyframes fd-df-nudge{0%{transform:rotate(0);}45%{transform:rotate(3.4deg);}
+  100%{transform:rotate(2.1deg);}}
+/* modo auto (default): la cadena cae sola en cascada — gravedad ease-in por ficha.
+   Ancladas a .reveal section.present (patrón anim-laptop: section.present +
+   fragment-visible, cf. gaugechart/balancescale): reveal mantiene renderizadas las
+   slides del viewDistance — sin ancla el reloj corre fuera de pantalla y la
+   audiencia llega a una cadena YA caída. El :is() cubre la escena-como-beat. */
+.reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .tile .body{
+  animation:fd-df-fall .32s cubic-bezier(.55,.05,.83,.4)
+    calc(.16s + var(--i,0)*.11s) forwards;}
+.reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .tile .cs{
+  animation:fd-df-spread .32s cubic-bezier(.55,.05,.83,.4)
+    calc(.16s + var(--i,0)*.11s) forwards;}
+/* causa→efecto: el contacto de la última ficha llega al 62% de su fall
+   (.16+(n−1)·.11+.62·.32 ≈ .25+n·.11) — el vuelco arranca JUSTO tras el golpe */
+.reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .slab{
+  animation:fd-df-topple .4s cubic-bezier(.55,.05,.83,.4)
+    calc(.25s + var(--n,1)*.11s) forwards;}
+.reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .imp{
+  animation:fd-df-shock .55s ease-out calc(.53s + var(--n,1)*.11s);}
+.reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .val{
+  animation:fd-df-stamp .44s cubic-bezier(.3,1.2,.4,1)
+    calc(.57s + var(--n,1)*.11s) forwards;}
+.reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .cap{
+  animation:fd-df-fadeup .28s ease calc(.71s + var(--n,1)*.11s) forwards;}
+/* modo fall_per_step: cada ficha es un beat (fragment custom = se ve EN PIE antes);
+   la ficha golpeada se inclina 2° medio beat después del impacto anterior */
+.fd-dominofall.sp-beat .tile.visible .body{
+  animation:fd-df-fall .36s cubic-bezier(.55,.05,.83,.4) forwards;}
+.fd-dominofall.sp-beat .tile.visible .cs{
+  animation:fd-df-spread .36s cubic-bezier(.55,.05,.83,.4) forwards;}
+.fd-dominofall.sp-beat .tile.visible + .tile:not(.visible) .body{
+  animation:fd-df-nudge .5s cubic-bezier(.34,1.56,.5,1) .28s both;}
+.fd-dominofall.sp-beat .tile.visible + .payoff:not(.visible) .slab{
+  animation:fd-df-nudge .5s cubic-bezier(.34,1.56,.5,1) .28s both;}
+/* al llegar su beat, la ficha nudgeada arranca su fall desde los 2.1° de reposo:
+   el fill del nudge se DESCARTA al cambiar de animación, así que el ángulo de
+   espera vive en el estado BASE (.visible + .visible = fue golpeada antes) */
+.fd-dominofall.sp-beat .tile.visible + .tile.visible .body{transform:rotate(2.1deg);}
+.fd-dominofall.sp-beat .tile.visible + .payoff.visible .slab{transform:rotate(2.1deg);}
+.fd-dominofall.sp-beat .payoff.visible .slab{
+  animation:fd-df-topple .42s cubic-bezier(.55,.05,.83,.4) forwards;}
+.fd-dominofall.sp-beat .payoff.visible .imp{
+  animation:fd-df-shock .55s ease-out .3s;}
+.fd-dominofall.sp-beat .payoff.visible .val{
+  animation:fd-df-stamp .46s cubic-bezier(.3,1.2,.4,1) .36s forwards;}
+.fd-dominofall.sp-beat .payoff.visible .cap{
+  animation:fd-df-fadeup .3s ease .54s forwards;}
+@media (prefers-reduced-motion: reduce){
+  .reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .tile .body,
+  .fd-dominofall.sp-beat .tile.visible .body,
+  .fd-dominofall.sp-beat .tile.visible + .tile.visible .body{
+    animation:none;transform:rotate(var(--fa));}
+  .reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .tile .cs,
+  .fd-dominofall.sp-beat .tile.visible .cs{
+    animation:none;transform:scaleX(var(--csx));opacity:.2;}
+  .fd-dominofall.sp-beat .tile.visible + .tile:not(.visible) .body,
+  .fd-dominofall.sp-beat .tile.visible + .payoff:not(.visible) .slab{animation:none;}
+  .reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .slab,
+  .fd-dominofall.sp-beat .payoff.visible .slab,
+  .fd-dominofall.sp-beat .tile.visible + .payoff.visible .slab{
+    animation:none;transform:rotate(90deg);}
+  .reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .imp,
+  .fd-dominofall.sp-beat .payoff.visible .imp{
+    animation:none;opacity:0;}
+  .reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .val,
+  .fd-dominofall.sp-beat .payoff.visible .val,
+  .reveal section.present .fd-dominofall.sp-auto:is(:not(.fragment),.fragment.visible) .payoff .cap,
+  .fd-dominofall.sp-beat .payoff.visible .cap{
+    animation:none;opacity:1;transform:none;}
+}
+
+/* ---- foundry: hubspoke (core/components/foundry/hubspoke.ts) ---- */
+.fd-hubspoke{position:absolute;box-sizing:border-box;}
+.fd-hubspoke .wires{position:absolute;left:0;top:0;display:block;overflow:visible;}
+/* órbitas hairline: el carril de los satélites */
+.fd-hubspoke .orbit{fill:none;stroke:var(--line);stroke-width:1;stroke-dasharray:2 7;
+  stroke-linecap:round;}
+.fd-hubspoke .orbit--r2{opacity:.6;}
+/* radios: tinta suave que se DIBUJA desde el hub (cascada en un reloj) */
+.fd-hubspoke .ln{stroke:color-mix(in srgb,var(--light) 42%,transparent);
+  stroke-width:2.5;stroke-linecap:round;}
+.fd-hubspoke .ln:not(.dash){stroke-dasharray:1;stroke-dashoffset:1;
+  animation:fd-hs-draw .3s ease-out both;animation-delay:calc(.12s + var(--i,0)*.06s);}
+.fd-hubspoke .ln.dash{stroke-dasharray:4 7;
+  animation:fd-hs-fade .3s ease-out both;animation-delay:calc(.12s + var(--i,0)*.06s);}
+.fd-hubspoke .ln.r2{stroke-width:1.6;stroke:color-mix(in srgb,var(--light) 30%,transparent);}
+.fd-hubspoke .ln.t-acc{stroke:var(--accent);stroke-width:3.5;
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--accent) 45%,transparent));}
+.fd-hubspoke .ln.t-bad{stroke:var(--bad);}
+/* satélite: ancla 0×0 en la órbita — el PUNTO vive en ella, la card empuja radialmente
+   hacia fuera (--ux/--uy: 50% del propio tamaño + 14px de aire) y el conector queda
+   visible entero. La card llega por su cable, escalando DESDE el lado del punto. */
+.fd-hubspoke .spk{position:absolute;width:0;height:0;}
+.fd-hubspoke .spk .pt{position:absolute;left:-6px;top:-6px;width:12px;height:12px;
+  border-radius:50%;background:color-mix(in srgb,var(--light) 78%,var(--bg));
+  box-shadow:0 2px 5px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 1px rgba(0,0,0,.3);
+  animation:fd-hs-pop2 .26s cubic-bezier(.3,1.35,.45,1) both;
+  animation-delay:calc(.2s + var(--i,0)*.06s);}
+.fd-hubspoke .spk .off{position:absolute;left:0;top:0;width:max-content;
+  transform:translate(calc(-50% + var(--ux,0)*50% + var(--ux,0)*18px),
+    calc(-50% + var(--uy,0)*50% + var(--uy,0)*18px));}
+.fd-hubspoke .spk .card{width:max-content;max-width:168px;text-align:center;
+  padding:10px 14px;box-sizing:border-box;
+  border-radius:var(--radius);border:1px solid var(--card-bd);
+  background:linear-gradient(180deg,color-mix(in srgb,#fff 9%,var(--bg)),
+    color-mix(in srgb,#000 10%,var(--bg)));
+  box-shadow:0 14px 28px rgba(0,0,0,.32),0 3px 8px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.18);
+  transform-origin:calc(50% - var(--ux,0)*50%) calc(50% - var(--uy,0)*50%);
+  animation:fd-hs-pop .32s cubic-bezier(.3,1.35,.45,1) both;
+  animation-delay:calc(.26s + var(--i,0)*.06s);}
+.fd-hubspoke .spk .lbl{font-family:var(--body);font-weight:800;font-size:16px;
+  line-height:1.15;color:var(--light);}
+.fd-hubspoke .spk .note{font-family:var(--body);font-weight:600;font-size:14px;
+  line-height:1.25;color:var(--dim);margin-top:3px;}
+.fd-hubspoke .spk--r2 .card{max-width:150px;padding:7px 12px;}
+.fd-hubspoke .spk--r2 .lbl{font-size:14px;}
+.fd-hubspoke .spk--r2 .note{font-size:14px;margin-top:2px;}
+/* satélite del argumento: aro + glow del accent (color + aro, nunca solo color) */
+.fd-hubspoke .spk.t-acc .pt{background:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 35%,transparent),
+    0 2px 5px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.55);}
+.fd-hubspoke .spk.t-bad .pt{background:var(--bad);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--bad) 30%,transparent),
+    0 2px 5px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.45);}
+.fd-hubspoke .spk.t-acc .card{border-color:color-mix(in srgb,var(--accent) 65%,transparent);
+  box-shadow:0 0 0 2.5px color-mix(in srgb,var(--accent) 75%,transparent),
+    0 14px 28px rgba(0,0,0,.32),0 3px 8px rgba(0,0,0,.22),
+    0 0 22px color-mix(in srgb,var(--accent) 25%,transparent),
+    inset 0 1px 0 rgba(255,255,255,.14),inset 0 -1px 0 rgba(0,0,0,.18);}
+.fd-hubspoke .spk.t-acc .lbl{color:var(--accent);}
+/* satélite que NO conecta: borde coral; su veredicto es el ✗ del conector */
+.fd-hubspoke .spk.t-bad .card{border-color:color-mix(in srgb,var(--bad) 62%,transparent);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--bad) 45%,transparent),
+    0 14px 28px rgba(0,0,0,.32),0 3px 8px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.18);}
+.fd-hubspoke .spk.t-bad .lbl{color:var(--bad);}
+.fd-hubspoke .nogo{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--body);font-weight:800;font-size:14px;line-height:1;color:var(--bad);
+  background:color-mix(in srgb,var(--bad) 20%,var(--bg));border:1.5px solid var(--bad);
+  box-shadow:0 4px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.14);
+  animation:fd-hs-pop2 .3s cubic-bezier(.3,1.35,.45,1) both;
+  animation-delay:calc(.34s + var(--i,0)*.06s);}
+/* el hub: disco con masa (luz radial + bisel + doble sombra), aro y aura del accent */
+.fd-hubspoke .hub{position:absolute;border-radius:50%;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;
+  background:radial-gradient(120% 120% at 30% 22%,rgba(255,255,255,.16),rgba(255,255,255,0) 55%),
+    linear-gradient(180deg,color-mix(in srgb,#fff 8%,var(--bg)),color-mix(in srgb,#000 14%,var(--bg)));
+  border:1px solid var(--card-bd);
+  box-shadow:0 18px 40px rgba(0,0,0,.42),0 4px 10px rgba(0,0,0,.26),
+    inset 0 2px 0 rgba(255,255,255,.15),inset 0 -6px 14px rgba(0,0,0,.28);
+  animation:fd-hs-hub-in .36s ease-out both;}
+.fd-hubspoke .hub::after{content:"";position:absolute;inset:-8px;border-radius:50%;
+  border:2px solid color-mix(in srgb,var(--accent) 42%,transparent);}
+.fd-hubspoke .hub .aura{position:absolute;inset:-30px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 15%,transparent),
+    transparent 72%);
+  animation:fd-hs-breathe 3.8s ease-in-out infinite;}
+.fd-hubspoke .hub .hlbl{position:relative;font-family:var(--body);font-weight:800;
+  font-size:15px;line-height:1.3;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--light);}
+.fd-hubspoke .hub .pic{position:absolute;inset:7px;border-radius:50%;overflow:hidden;}
+.fd-hubspoke .hub .pic img{width:100%;height:100%;object-fit:cover;display:block;}
+.fd-hubspoke .hub .pic::after{content:"";position:absolute;inset:0;border-radius:50%;
+  box-shadow:inset 0 8px 18px rgba(0,0,0,.35),inset 0 -2px 6px rgba(0,0,0,.25);}
+.fd-hubspoke .hub.has-pic .hlbl{position:absolute;left:50%;bottom:-14px;
+  transform:translateX(-50%);white-space:nowrap;background:var(--accent);
+  color:var(--accent-ink);padding:5px 13px;border-radius:var(--pill);font-size:14px;
+  letter-spacing:.09em;
+  box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25);}
+@keyframes fd-hs-draw{to{stroke-dashoffset:0;}}
+@keyframes fd-hs-fade{from{opacity:0;}}
+@keyframes fd-hs-pop{from{opacity:0;transform:scale(.7);}}
+@keyframes fd-hs-pop2{from{opacity:0;transform:scale(.55);}}
+@keyframes fd-hs-hub-in{from{opacity:0;transform:scale(.86);}}
+@keyframes fd-hs-breathe{50%{transform:scale(1.07);opacity:.85;}}
+@media (prefers-reduced-motion: reduce), print{
+  .fd-hubspoke .ln,.fd-hubspoke .spk .card,.fd-hubspoke .spk .pt,.fd-hubspoke .nogo,
+  .fd-hubspoke .hub,.fd-hubspoke .hub .aura{animation:none;}
+  .fd-hubspoke .ln:not(.dash){stroke-dasharray:none;stroke-dashoffset:0;}
+}
+
+/* ---- foundry: napkinmath (core/components/foundry/napkinmath.ts) ---- */
+.fd-napkinmath{position:absolute;box-sizing:border-box;padding:26px 30px 28px;
+  --rot:-2deg;
+  --paper:color-mix(in srgb,var(--sticker-bg,#FCE9A6) 24%,#fff);
+  --pen:var(--sticker-ink,#2a2410);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(180deg,transparent calc(50% - 1px),rgba(0,0,0,.05) calc(50% - 1px),
+      rgba(0,0,0,.05) 50%,rgba(255,255,255,.6) 50%,transparent calc(50% + 1px)),
+    linear-gradient(90deg,transparent calc(50% - 1px),rgba(0,0,0,.045) calc(50% - 1px),
+      rgba(0,0,0,.045) 50%,rgba(255,255,255,.5) 50%,transparent calc(50% + 1px)),
+    radial-gradient(rgba(0,0,0,.05) .7px,transparent 1.2px);
+  background-size:100% 100%,100% 100%,9px 9px;
+  border-radius:16px 20px 14px 22px / 20px 15px 22px 14px;
+  transform:rotate(var(--rot));
+  box-shadow:0 18px 40px rgba(0,0,0,.36),0 3px 8px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.8),inset 0 -2px 5px rgba(0,0,0,.07);}
+/* borde troquelado: la cenefa repujada a rombos de las servilletas de bar */
+.fd-napkinmath::before{content:"";position:absolute;inset:9px;pointer-events:none;
+  border:1.5px dashed rgba(0,0,0,.10);
+  border-radius:12px 16px 10px 17px / 15px 11px 17px 10px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45);}
+/* el cerco del café: la servilleta estuvo en una mesa de verdad */
+.fd-napkinmath .stain{position:absolute;top:12px;right:16px;width:76px;height:64px;
+  border:8px solid rgba(0,0,0,.05);border-radius:50%;transform:rotate(-6deg);
+  pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.02),0 0 0 1px rgba(0,0,0,.02);}
+/* las líneas de la cuenta: mano real — jitter de rotación e indentación por índice */
+.fd-napkinmath .ln{position:relative;margin:0 0 5px;transform:rotate(var(--jt,0deg));}
+.fd-napkinmath .ln .tx{display:inline-block;font-family:var(--hand,'Kalam',cursive);
+  font-weight:400;font-size:24px;line-height:1.42;color:var(--pen);opacity:0;
+  clip-path:inset(-14% 103% -18% -3%);}
+/* el resultado: el héroe, escrito más grande; el aro a lápiz vive con él */
+.fd-napkinmath .res{position:relative;display:inline-block;margin-top:14px;
+  padding:8px 22px 10px 16px;}
+.fd-napkinmath .res .tx{display:inline-block;font-family:var(--hand,'Kalam',cursive);
+  font-weight:700;font-size:46px;line-height:1.12;color:var(--pen);opacity:0;
+  clip-path:inset(-14% 103% -18% -3%);}
+/* el svg es replaced element: width/height EXPLÍCITOS (inset+auto usaría el
+   ratio intrínseco del viewBox y desbordaría el papel — medido, no adivinado) */
+.fd-napkinmath .res svg{position:absolute;left:-2px;top:-3px;
+  width:calc(100% + 6px);height:calc(100% + 8px);
+  overflow:visible;pointer-events:none;transform:rotate(-1.2deg);}
+/* el trazo del lápiz: grafito (la tinta de la pieza), grosor vivo al estirarse;
+   opacity 0 base — un linecap redondo con dashoffset pleno pinta un punto espurio */
+.fd-napkinmath .res path{fill:none;stroke:var(--pen);stroke-width:2.2;
+  stroke-linecap:round;opacity:0;stroke-dasharray:100;stroke-dashoffset:100;}
+.fd-napkinmath .empty{font-family:var(--body);font-weight:700;font-size:15px;
+  color:var(--pen);opacity:.72;padding:6px 4px;line-height:1.4;}
+.fd-napkinmath .empty b{opacity:1;}
+/* UN reloj (arranca al entrar la slide o al llegar su beat), rápido como se
+   garabatea de verdad: la servilleta aterriza → línea i se escribe en
+   .15+i·.18s → el resultado en .2+n·.18s → el lápiz rodea en .42+n·.18s.
+   Causa y efecto, nada descoordinado. */
+.fd-napkinmath:not(.fragment),.fd-napkinmath.fragment.visible{
+  animation:fd-nk-land .3s cubic-bezier(.3,1.35,.45,1) both;}
+.fd-napkinmath:not(.fragment) .ln .tx,.fd-napkinmath.fragment.visible .ln .tx{
+  animation:fd-nk-write .24s cubic-bezier(.35,.55,.35,1)
+    calc(.15s + var(--i,0)*.18s) forwards;}
+.fd-napkinmath:not(.fragment) .res .tx,.fd-napkinmath.fragment.visible .res .tx{
+  animation:fd-nk-write .28s cubic-bezier(.35,.55,.35,1)
+    calc(.2s + var(--n,0)*.18s) forwards;}
+.fd-napkinmath:not(.fragment) .res path,.fd-napkinmath.fragment.visible .res path{
+  animation:fd-nk-circ .32s cubic-bezier(.42,.1,.3,1)
+    calc(.42s + var(--n,0)*.18s) forwards;}
+@keyframes fd-nk-land{
+  0%{opacity:0;transform:rotate(calc(var(--rot) + 3.5deg)) scale(1.06) translateY(-12px);}
+  100%{opacity:1;transform:rotate(var(--rot)) scale(1) translateY(0);}}
+@keyframes fd-nk-write{
+  0%{opacity:1;clip-path:inset(-14% 103% -18% -3%);}
+  100%{opacity:1;clip-path:inset(-14% -3% -18% -3%);}}
+@keyframes fd-nk-circ{0%{opacity:.8;}100%{opacity:.8;stroke-dashoffset:0;}}
+@media (prefers-reduced-motion: reduce){
+  .fd-napkinmath,.fd-napkinmath .ln .tx,.fd-napkinmath .res .tx,
+  .fd-napkinmath .res path{animation:none;}
+  .fd-napkinmath .ln .tx,.fd-napkinmath .res .tx{opacity:1;clip-path:none;}
+  .fd-napkinmath .res path{stroke-dashoffset:0;opacity:.8;}
+}
+
+/* ---- foundry: polaroid (core/components/foundry/polaroid.ts) ---- */
+.fd-polaroid{position:absolute;box-sizing:border-box;}
+.fd-polaroid .card{position:absolute;left:0;top:0;box-sizing:border-box;width:100%;
+  padding:14px 14px 0;border-radius:3px;
+  background:linear-gradient(178deg,#fdfcf5 0%,#f8f3e7 68%,#efe8d7 100%);
+  transform:rotate(var(--rot,-3deg));transform-origin:50% 40%;
+  box-shadow:0 24px 46px rgba(0,0,0,.42),0 4px 10px rgba(0,0,0,.26),
+    inset 0 1px 0 rgba(255,255,255,.85),inset 0 -2px 3px rgba(0,0,0,.07);}
+.fd-polaroid .card.c0{position:relative;}
+.fd-polaroid .ph{position:relative;aspect-ratio:1/1;overflow:hidden;background:#181410;}
+.fd-polaroid .ph img{display:block;width:100%;height:100%;object-fit:cover;
+  filter:saturate(.92) contrast(1.04) sepia(.08);}
+.fd-polaroid .ph::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,.17) 0%,rgba(255,255,255,.05) 30%,transparent 46%),
+    radial-gradient(125% 105% at 50% 36%,transparent 56%,rgba(14,9,3,.3) 100%);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.42),inset 0 0 0 1px rgba(0,0,0,.26);}
+/* el faldón NO es flex: con <b> dentro, los nodos de texto se volverían flex-items
+   y el flujo se rompe (espacios colapsados, saltos barajados). Texto plano centrado;
+   el pie se escribe arriba del faldón, como en la foto real. */
+.fd-polaroid .cap{min-height:54px;padding:12px 8px 14px;text-align:center;
+  font-family:var(--hand,'Kalam',cursive);
+  font-size:20px;line-height:1.2;font-weight:400;color:#4a4231;}
+.fd-polaroid .cap b{font-weight:700;color:#241d0e;}
+.fd-polaroid .tape{position:absolute;height:25px;pointer-events:none;
+  background:linear-gradient(103deg,rgba(249,247,239,.3) 0%,rgba(249,247,239,.52) 46%,rgba(249,247,239,.33) 100%);
+  box-shadow:0 2px 5px rgba(0,0,0,.22),inset 0 0 0 1px rgba(255,255,255,.12);
+  clip-path:polygon(1.5% 0,98% 3%,100% 26%,97.5% 52%,100% 76%,98.5% 100%,2% 97%,0 74%,2.5% 48%,0 24%);}
+.fd-polaroid .tape.tc{left:50%;top:-12px;width:38%;transform:translateX(-50%) rotate(-2.5deg);}
+.fd-polaroid .tape.ta{left:-17px;top:-8px;width:86px;transform:rotate(-42deg);}
+.fd-polaroid .tape.tb{right:-17px;top:-8px;width:86px;transform:rotate(42deg);}
+/* coreografía en UN reloj (patrón anim-laptop: .reveal section.present + fragment-
+   visible — gaugechart, balancescale, coachmark): la carta cae y el film se revela
+   al LLEGAR su slide o al caer su beat, NUNCA al cargar el deck (en un deck reveal
+   TODAS las slides están en el DOM desde el load). Estado base = estado FINAL, así
+   que fuera de present / en PDF la carta ya está en reposo. */
+.reveal section.present .fd-polaroid:is(:not(.fragment),.fragment.visible) .card:not(.fragment),
+.reveal section.present .fd-polaroid .card.fragment.visible{
+  animation:fd-pol-drop .42s cubic-bezier(.2,.7,.28,1.12) backwards;
+  animation-delay:calc(var(--i,0)*.09s);}
+.reveal section.present .fd-polaroid:is(:not(.fragment),.fragment.visible) .card.dev:not(.fragment) .ph img,
+.reveal section.present .fd-polaroid .card.dev.fragment.visible .ph img{
+  animation:fd-pol-develop 2.6s ease-out .2s backwards;}
+@keyframes fd-pol-drop{
+  0%{opacity:0;transform:translateY(-26px) rotate(calc(var(--rot,-3deg) - 5deg)) scale(1.05);}
+  62%{opacity:1;}
+  100%{opacity:1;transform:translateY(0) rotate(var(--rot,-3deg)) scale(1);}
+}
+@keyframes fd-pol-develop{
+  from{filter:sepia(.72) saturate(.32) brightness(1.32) contrast(.68);}
+  to{filter:saturate(.92) contrast(1.04) sepia(.08);}
+}
+@media (prefers-reduced-motion: reduce), print{
+  .reveal section.present .fd-polaroid:is(:not(.fragment),.fragment.visible) .card:not(.fragment),
+  .reveal section.present .fd-polaroid .card.fragment.visible{animation:none;}
+  .reveal section.present .fd-polaroid:is(:not(.fragment),.fragment.visible) .card.dev:not(.fragment) .ph img,
+  .reveal section.present .fd-polaroid .card.dev.fragment.visible .ph img{animation:none;}
+}
+
+/* ---- foundry: splitflap (core/components/foundry/splitflap.ts) ---- */
+.fd-splitflap{position:absolute;box-sizing:border-box;--tone-c:var(--accent);}
+.fd-splitflap.tn-ok{--tone-c:var(--ok);}
+.fd-splitflap.tn-bad{--tone-c:var(--bad);}
+.fd-splitflap.tn-light{--tone-c:var(--light);}
+.fd-splitflap .sr{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;}
+/* el chasis del tablero: masa (sombra doble) + bisel, panel más oscuro que la slide */
+.fd-splitflap .board{position:relative;display:flex;gap:calc(var(--sz)*.07);
+  padding:calc(var(--sz)*.13) calc(var(--sz)*.14);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 66%,#000),
+    color-mix(in srgb,var(--bg) 46%,#000));
+  border:1px solid var(--card-bd);border-radius:var(--radius-lg);
+  box-shadow:0 22px 48px rgba(0,0,0,.44),0 4px 10px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(0,0,0,.34);}
+.fd-splitflap .tile{position:relative;width:calc(var(--sz)*.72);height:var(--sz);
+  perspective:calc(var(--sz)*3.4);}
+/* las mitades: troqueladas, cada una con SU luz (arriba la recoge, abajo vive en
+   sombra) — la junta de 2px entre ambas ES la bisagra (enseña el chasis) */
+.fd-splitflap .up,.fd-splitflap .lo,.fd-splitflap .ff,.fd-splitflap .fb{
+  position:absolute;left:0;right:0;height:calc(50% - 1px);overflow:hidden;}
+.fd-splitflap .up,.fd-splitflap .ff{top:0;
+  border-radius:calc(var(--sz)*.075) calc(var(--sz)*.075) 2px 2px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 42%,#000),
+    color-mix(in srgb,var(--bg) 28%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.11),inset 0 -1px 0 rgba(0,0,0,.34);}
+.fd-splitflap .lo,.fd-splitflap .fb{top:calc(50% + 1px);
+  border-radius:2px 2px calc(var(--sz)*.075) calc(var(--sz)*.075);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--bg) 22%,#000),
+    color-mix(in srgb,var(--bg) 34%,#000));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),inset 0 -2px 3px rgba(0,0,0,.38);}
+/* el glifo: la voz cuantitativa (--head, lining), partido por la bisagra */
+.fd-splitflap .tile b{display:block;height:var(--sz);line-height:var(--sz);
+  text-align:center;font-family:var(--head);font-weight:600;
+  font-size:calc(var(--sz)*.62);color:var(--tone-c);
+  font-variant-numeric:lining-nums;font-style:normal;
+  text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.fd-splitflap .lo b,.fd-splitflap .fb b{margin-top:calc(var(--sz)*-.5 - 1px);}
+/* residuales (el vuelo anterior): tinta apagada — la palabra final canta en su tono */
+.fd-splitflap .lo b,.fd-splitflap .ff b{
+  color:color-mix(in srgb,var(--dim) 62%,transparent);text-shadow:none;}
+/* la hoja: cara = residual arriba, dorso = nuevo abajo; cae sobre la bisagra */
+.fd-splitflap .flap{position:absolute;left:0;right:0;top:0;height:calc(50% - 1px);
+  transform-origin:50% calc(100% + 1px);transform-style:preserve-3d;
+  animation:fd-sf-flip .5s calc(var(--i,0)*var(--stag,.07s) + .12s) both;
+  will-change:transform;}
+.fd-splitflap .ff,.fd-splitflap .fb{top:0;height:100%;backface-visibility:hidden;}
+.fd-splitflap .fb{transform:rotateX(180deg);}
+/* pasadores de la bisagra: metal con luz (literales de LUZ, no paleta) */
+.fd-splitflap .pin{position:absolute;top:50%;width:5px;height:10px;margin-top:-5px;
+  border-radius:2.5px;
+  background:linear-gradient(180deg,rgba(255,255,255,.38),rgba(255,255,255,.10) 45%,
+    rgba(0,0,0,.42));
+  box-shadow:0 1px 2px rgba(0,0,0,.5);}
+.fd-splitflap .pin.pl{left:-2px;}
+.fd-splitflap .pin.pr{right:-2px;}
+/* el pie: qué ES la cifra — una voz, mínima */
+.fd-splitflap .lbl{margin-top:13px;text-align:center;font-family:var(--body);
+  font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);}
+.fd-splitflap .err{position:relative;padding:18px 22px;font-family:var(--body);
+  font-weight:700;font-size:16px;color:var(--dim);background:var(--card-bg);
+  border:1px solid var(--card-bd);border-radius:var(--radius);}
+.fd-splitflap .err b{color:var(--accent);margin:0 .3em;}
+/* la caída: gravedad → golpe → REBOTE abierto (el clac se VE) → segundo bote →
+   asiento. OJO: nada de filter en la hoja — un filter aplana el contexto 3D y
+   rompe el backface (la mitad nueva no aparecería): la sombra de vuelo vive en
+   la mitad inferior (fd-sf-shade), que la recibe — física correcta, además */
+@keyframes fd-sf-flip{
+  0%{transform:rotateX(0);animation-timing-function:cubic-bezier(.55,0,.85,.36);}
+  38%{transform:rotateX(-92deg);animation-timing-function:cubic-bezier(.45,0,.8,.4);}
+  52%{transform:rotateX(-180deg);animation-timing-function:cubic-bezier(.2,.7,.4,1);}
+  68%{transform:rotateX(-157deg);animation-timing-function:cubic-bezier(.55,0,.8,.4);}
+  82%{transform:rotateX(-180deg);animation-timing-function:cubic-bezier(.25,.8,.4,1);}
+  91%{transform:rotateX(-172deg);animation-timing-function:cubic-bezier(.5,0,.7,.4);}
+  100%{transform:rotateX(-180deg);}}
+/* la sombra que la hoja PROYECTA sobre la mitad de abajo mientras cae — mismo
+   reloj y delay que su hoja (causa-efecto), muere en el contacto */
+.fd-splitflap .lo{
+  animation:fd-sf-shade .5s calc(var(--i,0)*var(--stag,.07s) + .12s) both;}
+@keyframes fd-sf-shade{
+  0%{box-shadow:inset 0 1px 0 rgba(255,255,255,.04),inset 0 -2px 3px rgba(0,0,0,.38);}
+  38%{box-shadow:inset 0 14px 12px -4px rgba(0,0,0,.5),
+    inset 0 -2px 3px rgba(0,0,0,.38);}
+  52%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.04),
+    inset 0 -2px 3px rgba(0,0,0,.38);}}
+/* la última ficha tintinea al cerrar: micro-jiggle del chasis de SU ficha */
+.fd-splitflap .t-last{
+  animation:fd-sf-jingle .45s ease calc((var(--n,1) - 1)*var(--stag,.07s) + .38s) both;}
+@keyframes fd-sf-jingle{
+  0%,100%{transform:none;}
+  30%{transform:rotate(1.1deg) translateY(-1px);}
+  55%{transform:rotate(-.7deg);}
+  78%{transform:rotate(.35deg);}}
+/* con beat: la cascada espera al beat (UN reloj, pausado hasta .visible) */
+.fd-splitflap.fragment .flap,.fd-splitflap.fragment .t-last,
+.fd-splitflap.fragment .lo{animation-play-state:paused;}
+.fd-splitflap.fragment.visible .flap,.fd-splitflap.fragment.visible .t-last,
+.fd-splitflap.fragment.visible .lo{animation-play-state:running;}
+@media (prefers-reduced-motion: reduce){
+  .fd-splitflap .flap{animation:none;transform:rotateX(-180deg);}
+  .fd-splitflap .t-last,.fd-splitflap .lo{animation:none;}
+}
+
+/* ---- foundry: spotlightmask (core/components/foundry/spotlightmask.ts) ---- */
+/* el contenedor del velo: clipea la sombra-velo al lienzo (misma caja que gd-dim) */
+.fd-spotlightmask{position:absolute;inset:0;overflow:hidden;pointer-events:none;
+  --fd-spot-dim:.7;--fd-spot-feather:24px;}
+/* EL FOCO. El velo es SU box-shadow (un elemento = una identidad morfeable):
+   rim 1px (la arista donde la luz corta la oscuridad) + bisel interior sutil
+   arriba-luz/abajo-sombra + velo de spread gigante con penumbra (blur ×.55 del
+   feather: la oscuridad respira hacia dentro, como un foco real). El glide del
+   viaje comparte bezier con la apertura: un solo vocabulario de movimiento. */
+.fd-spotlightmask .hole{position:absolute;box-sizing:border-box;pointer-events:auto;
+  left:var(--fd-s0-x);top:var(--fd-s0-y);width:var(--fd-s0-w);height:var(--fd-s0-h);
+  border-radius:var(--fd-s0-r);
+  box-shadow:0 0 0 1px rgba(255,255,255,.24),
+    inset 0 1px 0 rgba(255,255,255,.12),inset 0 -1px 0 rgba(0,0,0,.25),
+    0 0 calc(var(--fd-spot-feather)*.55) 2999px rgba(6,13,20,var(--fd-spot-dim));
+  transition:left .55s cubic-bezier(.22,.8,.24,1),top .55s cubic-bezier(.22,.8,.24,1),
+    width .55s cubic-bezier(.22,.8,.24,1),height .55s cubic-bezier(.22,.8,.24,1),
+    border-radius .55s cubic-bezier(.22,.8,.24,1);}
+/* el spill: la luz que sangra SOBRE el velo (pinta encima porque es hijo del foco).
+   Doble como las sombras de la casa — contacto tenso + ambiente ancho — teñido del
+   accent del skin: el foco tiene la voz de la piel, no un blanco de framework. */
+.fd-spotlightmask .hole::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  pointer-events:none;
+  box-shadow:0 0 calc(var(--fd-spot-feather)*.5) 0 color-mix(in srgb,var(--accent) 30%,transparent),
+    0 0 calc(var(--fd-spot-feather)*2.2) calc(var(--fd-spot-feather)*.5) color-mix(in srgb,var(--accent) 13%,transparent);}
+/* la nota manuscrita EN la luz — la voz humana (--hand), nunca UI */
+.fd-spotlightmask .lbl{position:absolute;width:max-content;max-width:260px;
+  font-family:var(--hand);font-weight:700;font-size:22px;line-height:1.25;
+  color:var(--light);text-shadow:0 2px 10px rgba(3,10,16,.65);}
+.fd-spotlightmask .lbl.s-right{left:calc(100% + 20px);top:50%;transform:translateY(-50%) rotate(-1.6deg);}
+.fd-spotlightmask .lbl.s-left{right:calc(100% + 20px);top:50%;transform:translateY(-50%) rotate(1.6deg);text-align:right;}
+.fd-spotlightmask .lbl.s-top{bottom:calc(100% + 16px);left:0;transform:rotate(-1.6deg);}
+.fd-spotlightmask .lbl.s-bottom{top:calc(100% + 16px);left:0;transform:rotate(-1.6deg);}
+/* los markers del viaje: fragments de 0×0 — solo existen para su clase .visible */
+.fd-spotlightmask .mk{position:absolute;width:0;height:0;overflow:hidden;}
+/* EL VIAJE: la parada más reciente gana (orden del stylesheet = orden de beats) */
+.fd-spotlightmask:has(.mk-1.visible) .hole{left:var(--fd-s1-x);top:var(--fd-s1-y);width:var(--fd-s1-w);height:var(--fd-s1-h);border-radius:var(--fd-s1-r);}
+.fd-spotlightmask:has(.mk-2.visible) .hole{left:var(--fd-s2-x);top:var(--fd-s2-y);width:var(--fd-s2-w);height:var(--fd-s2-h);border-radius:var(--fd-s2-r);}
+.fd-spotlightmask:has(.mk-3.visible) .hole{left:var(--fd-s3-x);top:var(--fd-s3-y);width:var(--fd-s3-w);height:var(--fd-s3-h);border-radius:var(--fd-s3-r);}
+.fd-spotlightmask:has(.mk-4.visible) .hole{left:var(--fd-s4-x);top:var(--fd-s4-y);width:var(--fd-s4-w);height:var(--fd-s4-h);border-radius:var(--fd-s4-r);}
+.fd-spotlightmask:has(.mk-5.visible) .hole{left:var(--fd-s5-x);top:var(--fd-s5-y);width:var(--fd-s5-w);height:var(--fd-s5-h);border-radius:var(--fd-s5-r);}
+.fd-spotlightmask:has(.mk-6.visible) .hole{left:var(--fd-s6-x);top:var(--fd-s6-y);width:var(--fd-s6-w);height:var(--fd-s6-h);border-radius:var(--fd-s6-r);}
+/* ENTRADA — un reloj (.55s), patrón anim-laptop (se dispara al LLEGAR la slide o su
+   beat, nunca al cargar): el velo cae → la apertura CONTRAE sobre el objetivo →
+   la nota llega un beat después. */
+.reveal section.present .fd-spotlightmask:not(.fragment),
+.reveal section.present .fd-spotlightmask.fragment.visible{animation:fd-spot-veil .55s ease-out both;}
+.reveal section.present .fd-spotlightmask:not(.fragment) .hole,
+.reveal section.present .fd-spotlightmask.fragment.visible .hole{animation:fd-spot-aperture .55s cubic-bezier(.2,.7,.25,1) both;}
+.reveal section.present .fd-spotlightmask:not(.fragment) .lbl,
+.reveal section.present .fd-spotlightmask.fragment.visible .lbl{animation:fd-spot-note .35s ease-out .25s both;}
+@keyframes fd-spot-veil{from{opacity:0;}to{opacity:1;}}
+@keyframes fd-spot-aperture{from{transform:scale(1.45);}to{transform:scale(1);}}
+@keyframes fd-spot-note{from{opacity:0;}to{opacity:1;}}
+/* sin motion (y PDF/print): estado FINAL legible, nada congelado a medias (brief §10) */
+@media (prefers-reduced-motion:reduce),print{
+  .reveal section.present .fd-spotlightmask:not(.fragment),
+  .reveal section.present .fd-spotlightmask.fragment.visible,
+  .reveal section.present .fd-spotlightmask:not(.fragment) .hole,
+  .reveal section.present .fd-spotlightmask.fragment.visible .hole,
+  .reveal section.present .fd-spotlightmask:not(.fragment) .lbl,
+  .reveal section.present .fd-spotlightmask.fragment.visible .lbl{animation:none;}
+  .fd-spotlightmask .hole{transition:none;}
+}
+
+/* ---- foundry: stampmark (core/components/foundry/stampmark.ts) ---- */
+.fd-stampmark{position:absolute;--stm-c:var(--ok);
+  --stm-grunge:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='-14' intercept='9.4'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='240' height='240' fill='%23000' filter='url(%23g)'/%3E%3C/svg%3E");}
+.fd-stampmark.t-bad{--stm-c:var(--bad);}
+.fd-stampmark.t-caution{--stm-c:color-mix(in srgb,var(--sticker-bg,#FCE9A6) 38%,var(--bad) 62%);}
+/* el sello: palabra + doble aro, todo tinta del tono, gastado por el grunge */
+.fd-stampmark .stamp{position:relative;display:inline-block;box-sizing:border-box;
+  transform:rotate(var(--ang,-8deg));color:var(--stm-c);
+  padding:calc(var(--sz,88px)*.16) calc(var(--sz,88px)*.28);
+  border:calc(var(--sz,88px)*.068) solid currentColor;
+  border-radius:calc(var(--sz,88px)*.2);
+  text-shadow:0 0 1px currentColor;
+  box-shadow:0 0 calc(var(--sz,88px)*.03) color-mix(in srgb,var(--stm-c) 50%,transparent),
+    inset 0 0 calc(var(--sz,88px)*.03) color-mix(in srgb,var(--stm-c) 45%,transparent);
+  -webkit-mask-image:var(--stm-grunge);mask-image:var(--stm-grunge);
+  -webkit-mask-size:240px 240px;mask-size:240px 240px;}
+/* el aro interior fino: el troquel del tampón de verdad lleva dos líneas */
+.fd-stampmark .stamp::before{content:"";position:absolute;
+  inset:calc(var(--sz,88px)*.045);pointer-events:none;
+  border:calc(var(--sz,88px)*.024) solid currentColor;
+  border-radius:calc(var(--sz,88px)*.13);}
+.fd-stampmark .txt{font-family:var(--body);font-weight:900;font-size:var(--sz,88px);
+  line-height:1;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;
+  display:block;}
+/* el halo de tinta del impacto: nace del canto del sello y sangra hacia fuera */
+.fd-stampmark .splat{position:absolute;inset:calc(var(--sz,88px)*-.07);
+  transform:rotate(var(--ang,-8deg));pointer-events:none;opacity:0;
+  border:calc(var(--sz,88px)*.05) solid var(--stm-c);
+  border-radius:calc(var(--sz,88px)*.24);filter:blur(3px);}
+/* UN reloj: caída con giro y motion-blur → contacto (squash .94) → overshoot →
+   micro-shake de asentado; el splat dispara EXACTO en el contacto (55% ≈ .23s) */
+.fd-stampmark .stamp{animation:fd-stm-slam .42s cubic-bezier(.22,1,.36,1) both;}
+.fd-stampmark .splat{animation:fd-stm-splat .38s ease-out .23s both;}
+@keyframes fd-stm-slam{
+  0%{opacity:0;transform:rotate(calc(var(--ang,-8deg) - 9deg)) scale(2.6);filter:blur(7px);}
+  38%{opacity:1;}
+  55%{transform:rotate(var(--ang,-8deg)) scale(.94);filter:blur(0);}
+  64%{transform:rotate(calc(var(--ang,-8deg) + 1.6deg)) scale(1.05) translate(1px,-1px);}
+  74%{transform:rotate(calc(var(--ang,-8deg) - .9deg)) scale(.985) translate(-1px,1px);}
+  84%{transform:rotate(calc(var(--ang,-8deg) + .4deg)) scale(1.008);}
+  100%{opacity:1;transform:rotate(var(--ang,-8deg)) scale(1);filter:blur(0);}}
+@keyframes fd-stm-splat{
+  0%{opacity:.55;transform:rotate(var(--ang,-8deg)) scale(.9);}
+  100%{opacity:0;transform:rotate(var(--ang,-8deg)) scale(1.16);}}
+/* con beat (slam_at_step): quieto e invisible hasta .visible — reveal re-dispara
+   la animación al devolverle la propiedad (mismo reloj, ahora a demanda) */
+.fd-stampmark.fragment:not(.visible) .stamp{animation:none;opacity:0;}
+.fd-stampmark.fragment:not(.visible) .splat{animation:none;opacity:0;}
+@media (prefers-reduced-motion: reduce){
+  .fd-stampmark .stamp{animation:none;opacity:1;
+    transform:rotate(var(--ang,-8deg));filter:none;}
+  .fd-stampmark .splat{animation:none;opacity:0;}
+}
